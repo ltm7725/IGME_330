@@ -30,6 +30,7 @@
                 background-color: red;
                 padding: 100px;
             }
+
         }
     </style>
     <script>
@@ -38,12 +39,12 @@
 
         let a = 10;
 
-        function addThem(a, b) {
+        let addThem = (a, b) => {
             return a + b;
         }
         //console.log(addThem(3,4))
 
-        function doStuff() {
+        let doStuff = () => {
             // When log is here, it prints but i is undefined 
             // because it is **HOISTED** before it is defined at all 
             //console.log("log end:", a, i)
@@ -66,7 +67,8 @@
         // 3B - get a reference to the #output <p>
         // 3C - update HTML of #output <p>
 
-        function greet(greeting) {
+        let greet = (greeting) => {
+            let theGreeting = greeting;
             let firstName = document.querySelector("#input-firstname").value;
             let lastName = document.querySelector("#input-lastname").value;
 
@@ -75,20 +77,27 @@
             if (!firstName.trim()) firstName = "Peter";
             if (!lastName.trim()) lastName = "Parker";
 
+            if (shoutify.checked) {
+                firstName = firstName.toUpperCase();
+                lastName = lastName.toUpperCase();
+                theGreeting = theGreeting.toUpperCase();
+            }
+
             // Regular string concatination
             //document.querySelector("#output").innerHTML = "Hello " + firstName + " " + lastName + " ! :)";
             // String concatination by means of *Template String*
-            document.querySelector("#output").innerHTML = `${greeting} ${firstName} ${lastName}! :)`
+            document.querySelector("#output").innerHTML = `${theGreeting} ${firstName} ${lastName}! :)`
         }
 
-        function init() {
+        let init = () => {
             const button = document.querySelector("#btn-hello");
             const button2 = document.querySelector("#btn-goodbye");
+            let shoutify = document.querySelector("#shoutify");
             // Add event listener or event handler (Listener is more robust)
             //button.onclick = sayHello;                // Handler
-            button.addEventListener("click", () => {greet("Hello")}); // Listener
+            button.addEventListener("click", () => { greet("Hello") }); // Listener
 
-            button2.addEventListener("click", () => {greet("Bye")}); // Listener
+            button2.addEventListener("click", () => { greet("Bye") }); // Listener
 
             document.querySelector("#output").style.color = "red";
             // Styles have camelCase notation when defining imperitavely (thru JavaScript)
@@ -103,12 +112,11 @@
 <body>
     <button id="btn-hello">Say Hello</button>
     <button id="btn-goodbye">Say Bye</button>
-    <input id="input-firstname">
-    <input id="input-lastname">
+    <input id="shoutify" type="checkbox">Shoutify!</input>
+    <input id="input-firstname" class="name">
+    <input id="input-lastname" class="name">
     <p id="output">???</p>
 
 </body>
 
 </html>
-
-<!-- do saygoodbye or greeing-->
