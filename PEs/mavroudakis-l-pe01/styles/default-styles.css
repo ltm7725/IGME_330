@@ -1,0 +1,97 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+    font-family: "Lemon", serif;
+    font-weight: 100;
+}
+
+@media only screen and (min-width: 320px) {
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    html,
+    body,
+    .container {
+        height: 100%;
+        margin: 0;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+        background-color: #174287;
+        color: #F5F5F5;
+        padding: .8rem;
+        margin: 0;
+        text-align: center;
+    }
+
+    #output {
+        text-align: center;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    h1 {
+        font-size: 3rem;
+        background-color: #23d160;
+    }
+
+    #myButton {
+        width: 300px;
+        height: 75pt;
+        font-size: 1.5rem;
+    }
+
+    body {
+        color: darkgray;
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    body {
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    h1 {
+        background-color: #ff3860;
+    }
+
+    .container {
+        display: block;
+        margin: 1rem;
+    }
+
+    #output {
+        text-align: left;
+    }
+}
+
+@media only screen and (min-width: 1100px) {
+    h1 {
+        background-color: #641ce0;
+        font-size: 1.5rem;
+        text-align: left;
+    }
+
+    .container {
+        display: flex;
+        font-size: 10vmin;
+    }
+
+    #output {
+        margin-top: 1%;
+        text-align: center;
+    }
+
+    button {
+        margin-bottom: 10%;
+    }
+}
