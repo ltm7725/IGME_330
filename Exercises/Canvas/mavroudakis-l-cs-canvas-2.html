@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>First Canvas</title>
+	<style>
+	canvas{
+		border:1px solid gray;
+	}
+	</style>
+	<script>
+		// #0 - in this class we will always use ECMAScript 5's "strict" mode
+		// See what 'use strict' does here:
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode
+		"use strict";
+		
+		// #1 call the `init` function after the pages loads
+		window.onload = init;
+	
+		function init(){
+			console.log("page loaded!");
+			// #2 Now that the page has loaded, start drawing!
+			
+			// A - `canvas` variable points at <canvas> tag
+			let canvas = document.querySelector("canvas");
+			
+			// B - the `ctx` variable points at a "2D drawing context"
+			let ctx = canvas.getContext("2d");
+			
+			// C - all fill operations are now in red
+			ctx.fillStyle = "red"; 
+			
+			// D - fill a rectangle with the current fill color
+				// X, Y, WIDTH, HEIGHT
+			ctx.fillRect(20,20,600,440); 
+
+            // Multiple ways to define color
+            // ctx.fillStyle = "#ffff00";
+            // ctx.fillStyle = "#ff0";
+            // ctx.fillStyle = "rgb(255,255,0,1)";
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(120,120,400,300);
+
+            // Orange; ***Black would be default***
+            ctx.strokeStyle = "rgb(255,128,0,1)";
+            ctx.lineWidth = 20;
+            ctx.strokeRect(120,120,400,300);
+
+			ctx.fillStyle = "orange";
+			ctx.fillRect(80,80,200,150);
+			ctx.fillStyle = "rgb(255,192,0,1)";
+			ctx.fillRect(360,80,200,150);
+
+			ctx.strokeStyle = "rgb(255,192,0,1)";
+            ctx.strokeRect(80,80,200,150);
+			ctx.strokeStyle = "orange";
+			ctx.strokeRect(360,80,200,150);
+
+
+			ctx.strokeStyle = "blue";
+			ctx.lineWidth = 3;
+
+			ctx.beginPath();
+			ctx.rect(120,120,400,300);
+			ctx.closePath();
+			ctx.fill();
+			ctx.stroke();
+
+			//lines
+				// top-left to bottom-right
+			ctx.strokeStyle = "green";
+			ctx.lineWidth = 20;
+			ctx.beginPath();
+			ctx.moveTo(20,20); //pen down; background rect start
+			ctx.lineTo(620,460); //pen over to bottom-right on background rect
+			ctx.closePath();
+			ctx.stroke();
+
+				// bottom-left to top-right
+			ctx.beginPath();
+			ctx.moveTo(20, 460);
+			ctx.lineTo(620, 20);
+			ctx.closePath();
+			ctx.stroke();
+
+			// Do-it-yourself line
+			ctx.strokeStyle = "blue";
+			ctx.lineWidth = 10;
+			ctx.beginPath();
+			ctx.moveTo(20, 240);
+			ctx.lineTo(620, 240);
+			ctx.closePath();
+			ctx.stroke();
+			
+			// Circle
+
+			ctx.strokeStyle = "magenta";
+			ctx.lineWidth = 5;
+			ctx.fillStyle = "yellow";
+			ctx.beginPath();
+				// X, Y, RADIUS, START ANGLE RADIANS, 
+				// END ANGLE RADIANS, and (if wanted) 
+				// TRUE/FALSE COUNTERCLOCKWISE RENDERING
+			ctx.arc(320,240,50,0,Math.PI*2)
+			ctx.closePath();
+			// Actually triggers the drawings
+			ctx.fill();
+			ctx.stroke();
+
+			// Semi-circle
+			ctx.strokeStyle = "red";
+			ctx.lineWidth = 3;
+			ctx.fillStyle = "pink";
+			ctx.beginPath();
+			ctx.arc(320,245,30,0,Math.PI)
+			ctx.closePath();
+			ctx.fill();
+			ctx.stroke();
+
+			// Left eye
+			ctx.beginPath();
+			ctx.arc(300,225,10,0,Math.PI*2)
+			ctx.closePath();
+			ctx.fill();
+			ctx.stroke();
+
+			// Right eye
+			ctx.beginPath();
+			ctx.arc(340,225,10,0,Math.PI*2)
+			ctx.closePath();
+			ctx.fill();
+			ctx.stroke();
+		}
+	</script>
+</head>
+<body>
+	<canvas width="640" height="480">
+		Get a real browser!
+	</canvas>
+</body>
+</html>
