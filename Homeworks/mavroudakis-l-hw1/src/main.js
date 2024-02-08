@@ -1,7 +1,7 @@
 import { randomElement } from "./utils.js";
 
 const loadBabble = () => {
-    const url = "../data/babble-data.json";
+    const url = "./data/babble-data.json";
     const xhr = new XMLHttpRequest();
     xhr.onload = (e) => {
         console.log(`In onload - HTTP Status Code = ${e.target.status}`);
