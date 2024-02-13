@@ -32,12 +32,14 @@
 
 		let ctx;
 		let paused;
+		let createRectangles;
 
 		function init() {
 			console.log("page loaded!");
 			// #2 Now that the page has loaded, start drawing!
 
 			paused = false;
+			createRectangles = true;
 
 			// A - `canvas` variable points at <canvas> tag
 			let canvas = document.querySelector("canvas");
@@ -150,23 +152,50 @@
 			ctx.fill();
 			ctx.stroke();
 
+			setupUI();
+			document.querySelector("canvas").addEventListener("click", canvasClicked);
+
 			update();
 		}
 
 		function drawRandomRect(ctx) {
-			ctx.fillStyle = getRandomColor();
-			ctx.strokeStyle = getRandomColor();
-			ctx.lineWidth = getRandomInt(2, 12);
-			ctx.beginPath();
-			ctx.rect(getRandomInt(0, 640), getRandomInt(0, 480), getRandomInt(10, 90), getRandomInt(10, 90));
-			ctx.closePath();
-			ctx.fill();
-			ctx.stroke();
+			if(!paused){
+
+				let width = getRandomInt(10, 190);
+				let height = getRandomInt(10, 190);
+				drawRectangle(ctx, getRandomInt(0, 640 - width), getRandomInt(0, 480 - height), width, height, getRandomColor(), getRandomInt(2, 12), getRandomColor());
+			
+			}
 		}
 
 		function update() {
 			requestAnimationFrame(update);
-			drawRandomRect(ctx);
+			if(createRectangles) drawRandomRect(ctx);
+		}
+
+		function setupUI() {
+			let btnPause = document.querySelector("#btnPause");
+			let btnPlay = document.querySelector("#btnPlay");
+			let check = document.querySelector("#cbRectangles");
+			btnPause.addEventListener("click", () => {paused = true;});
+			btnPlay.addEventListener("click", () => {paused = false;});
+			check.addEventListener("click", () => {createRectangles = check.checked;});
+		}
+
+		function drawRectangle(ctx, x, y, width, height, fillStyle="black", lineWidth=0, strokeStyle="black") {
+
+			ctx.fillStyle = fillStyle;
+			ctx.lineWidth = lineWidth;
+			ctx.strokeStyle = strokeStyle;
+			ctx.beginPath();
+
+			if(x + width > 640) x = 640 - width;
+			if(y + height > 480) x = 480 - height;
+			ctx.rect(x, y, width, height);
+
+			ctx.closePath();
+			ctx.fill();
+			ctx.stroke();
 		}
 
 		// handy helper functions!
@@ -185,7 +214,33 @@
 			let rect = e.target.getBoundingClientRect();
 			let mouseX = e.clientX - rect.x;
 			let mouseY = e.clientY - rect.y;
+			console.log(mouseX,mouseY);
+		}
+
+		function canvasClicked(e) {
+			let rect = e.target.getBoundingClientRect();
+			let mouseX = e.clientX - rect.x;
+			let mouseY = e.clientY - rect.y;
 			console.log(mouseX, mouseY);
+
+			let integral = 100;
+
+			for(let i = 0; i < 10; i++) {
+
+				let width = getRandomInt(10, 90);
+				let height = getRandomInt(10, 90);
+
+				let minX = mouseX - integral;
+				if(minX < 0) minX = 0;
+				let minY = mouseY - integral
+				if(minY < 0) minY = 0;
+				let maxX = mouseX + integral;
+				if(maxX > 640) maxX = 640 - width;
+				let maxY = mouseY + integral;
+				if(maxY > 480) maxY = 480 - height;
+
+				drawRectangle(ctx, getRandomInt(minX, maxX), getRandomInt(minY, maxY), width, height, getRandomColor(), getRandomInt(2, 12), getRandomColor());
+			}
 		}
 
 	</script>
