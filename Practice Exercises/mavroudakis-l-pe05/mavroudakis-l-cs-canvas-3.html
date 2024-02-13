@@ -142,7 +142,12 @@
 			ctx.strokeStyle = getRandomColor();
 			ctx.lineWidth = getRandomInt(2, 12);
 			ctx.beginPath();
-			ctx.rect(getRandomInt(0, 640), getRandomInt(0, 480), getRandomInt(10, 90), getRandomInt(10, 90));
+
+			// Make it so no boxes cut outside the frame
+			let width = getRandomInt(10, 190);
+			let height = getRandomInt(10, 190);
+			ctx.rect(getRandomInt(0, 640 - width), getRandomInt(0, 480 - height), width, height);
+
 			ctx.closePath();
 			ctx.fill();
 			ctx.stroke();
