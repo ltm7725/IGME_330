@@ -46,7 +46,7 @@
 
 			// B - the `ctx` variable points at a "2D drawing context"
 			ctx = canvas.getContext("2d");
-			
+
 
 			// C - all fill operations are now in red
 			ctx.fillStyle = "red";
@@ -153,49 +153,55 @@
 			ctx.stroke();
 
 			setupUI();
-			document.querySelector("canvas").addEventListener("click", canvasClicked);
+			canvas.addEventListener("click", canvasClicked);
 
 			update();
 		}
 
 		function drawRandomRect(ctx) {
-			if(!paused){
-
+			if (!paused) {
+				// Making sure boxes don't clip outside of canvas
 				let width = getRandomInt(10, 190);
 				let height = getRandomInt(10, 190);
 				drawRectangle(ctx, getRandomInt(0, 640 - width), getRandomInt(0, 480 - height), width, height, getRandomColor(), getRandomInt(2, 12), getRandomColor());
-			
+
 			}
 		}
 
 		function update() {
 			requestAnimationFrame(update);
-			if(createRectangles) drawRandomRect(ctx);
+			if (createRectangles) drawRandomRect(ctx);
 		}
 
 		function setupUI() {
 			let btnPause = document.querySelector("#btnPause");
 			let btnPlay = document.querySelector("#btnPlay");
 			let check = document.querySelector("#cbRectangles");
-			btnPause.addEventListener("click", () => {paused = true;});
-			btnPlay.addEventListener("click", () => {paused = false;});
-			check.addEventListener("click", () => {createRectangles = check.checked;});
+			btnPause.addEventListener("click", () => { paused = true; });
+			btnPlay.addEventListener("click", () => { paused = false; });
+
+			// Added createRectangles boolean change a bit differently but works the same
+			check.addEventListener("click", () => { createRectangles = check.checked; });
 		}
 
-		function drawRectangle(ctx, x, y, width, height, fillStyle="black", lineWidth=0, strokeStyle="black") {
+		function drawRectangle(ctx, x, y, width, height, fillStyle = "black", lineWidth = 0, strokeStyle = "black") {
+
+			ctx.save();
 
 			ctx.fillStyle = fillStyle;
 			ctx.lineWidth = lineWidth;
 			ctx.strokeStyle = strokeStyle;
 			ctx.beginPath();
 
-			if(x + width > 640) x = 640 - width;
-			if(y + height > 480) x = 480 - height;
+			if (x + width > 640) x = 640 - width;
+			if (y + height > 480) x = 480 - height;
 			ctx.rect(x, y, width, height);
 
 			ctx.closePath();
 			ctx.fill();
 			ctx.stroke();
+
+			ctx.restore();
 		}
 
 		// handy helper functions!
@@ -214,7 +220,7 @@
 			let rect = e.target.getBoundingClientRect();
 			let mouseX = e.clientX - rect.x;
 			let mouseY = e.clientY - rect.y;
-			console.log(mouseX,mouseY);
+			console.log(mouseX, mouseY);
 		}
 
 		function canvasClicked(e) {
@@ -225,19 +231,20 @@
 
 			let integral = 100;
 
-			for(let i = 0; i < 10; i++) {
+			// Spraypaint
+			if (createRectangles) for (let i = 0; i < 10; i++) {
 
 				let width = getRandomInt(10, 90);
 				let height = getRandomInt(10, 90);
 
 				let minX = mouseX - integral;
-				if(minX < 0) minX = 0;
+				if (minX < 0) minX = 0;
 				let minY = mouseY - integral
-				if(minY < 0) minY = 0;
+				if (minY < 0) minY = 0;
 				let maxX = mouseX + integral;
-				if(maxX > 640) maxX = 640 - width;
+				if (maxX > 640) maxX = 640 - width;
 				let maxY = mouseY + integral;
-				if(maxY > 480) maxY = 480 - height;
+				if (maxY > 480) maxY = 480 - height;
 
 				drawRectangle(ctx, getRandomInt(minX, maxX), getRandomInt(minY, maxY), width, height, getRandomColor(), getRandomInt(2, 12), getRandomColor());
 			}
