@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Sine Start</title>
+    <style>
+        #main {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #ranges {
+            background-color: rgb(219, 219, 219);
+            font-weight: bold;
+            padding: 1vmax;
+            margin: auto;
+            margin-top: 2vmax;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            width: 75vmax;
+            min-width: 400px;
+            margin: auto;
+            border: 1px solid black;
+            margin-bottom: 2%;
+        }
+
+        #restart {
+            width: 10vmax;
+            height: 4vmax;
+            font-size: 2vmax;
+            margin: auto;
+        }
+
+        input {
+            margin: auto;
+            width: 10vmax;
+        }
+
+        #divergence, #c, #speed {
+            display: flex;
+        }
+
+        select {
+            margin-bottom: 1vmax;
+        }
+        #ranges p {
+            font-weight: 100;
+        }
+    </style>
+    <script>
+        "use strict";
+        const canvasWidth = 400, canvasHeight = 300;
+        let ctx;
+        let n = 0;
+        let divergence = 137.5;
+        let c = 4;
+        let restart = false;
+        let color;
+        let aDegrees;
+        let colorSelect;
+        let progSelect;
+        let mouseX, mouseY;
+        let speed = 60;
+        let centerX = 200;
+        let centerY = 150;
+
+        window.onload = init;
+
+        function init() {
+            document.querySelector("#restart").addEventListener("click", () => { restart = true; });
+            let divergText = document.querySelector("#divergence p");
+            let cText = document.querySelector("#c p");
+            let speedText = document.querySelector("#speed p");
+            let divergSlider = document.querySelector("#slider1");
+            let cSlider = document.querySelector("#slider2");
+            let speedSlider = document.querySelector("#slider3");
+            colorSelect = document.querySelector("#colors");
+            progSelect = document.querySelector("#progression");
+            divergText.innerHTML = `‎ ‎ ‎ Divergence: ${divergence}`;
+            cText.innerHTML = `‎ ‎ ‎ Dot distance (C): ${c}`;
+            speedText.innerHTML = `‎ ‎ ‎ Simulation speed: ${speed}`;
+
+            canvas.addEventListener("click", canvasClicked);
+
+            // colorSelect.oninput = updateColor;
+            // progSelect.oninput = updateColor;
+
+            divergSlider.oninput = () => {
+                divergence = divergSlider.value;
+                divergText.innerHTML = `‎ ‎ ‎ Divergence: ${divergence}`;
+            };
+
+            cSlider.oninput = () => {
+                c = cSlider.value;
+                cText.innerHTML = `‎ ‎ ‎ Dot distance (C): ${c}`;
+            };
+
+            speedSlider.oninput = () => {
+                speed = speedSlider.value;
+                speedText.innerHTML = `‎ ‎ ‎ Simulation speed: ${speed}`;
+            };
+
+            ctx = canvas.getContext("2d");
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            loop();
+        }
+
+        function updateColor() {
+            if (colorSelect.value == 1) { // Rainbow
+                if (progSelect.value == 1) color = `hsl(${n / 5 % 361}, 100%, 50%)`; // Rainbow gradient
+                else {
+                    aDegrees = (n * divergence) % 361; // Rainbow pinwheel
+                    color = `hsl(${aDegrees}, 100%, 50%)`;
+                }
+            }
+            else { // Blue to magenta
+                if(progSelect.value == 1) color = `rgb(${n / 2 % 256},0,255)`; // Blue to magenta gradient
+                else {
+                    aDegrees = (n * divergence) % 361; // Blue to magenta pinwheel
+                    color = `rgb(${aDegrees},0,255)`;
+                }
+            }
+        }
+
+        function loop() {
+            setTimeout(loop, 1000 / speed);
+
+            // each frame draw a new dot
+            // `a` is the angle
+            // `r` is the radius from the center (e.g. "Pole") of the flower
+            // `c` is the "padding/spacing" between the dots
+            let a = n * dtr(divergence);
+            let r = c * Math.sqrt(n);
+            //console.log(a,r);
+            // now calculate the `x` and `y`
+            let x = (r * Math.cos(a) + canvasWidth / 2) + (centerX - 200);
+            let y = (r * Math.sin(a) + canvasHeight / 2) + (centerY - 150);
+            //console.log(x,y);
+
+            // drawCircle(ctx,x,y,2,"white");
+
+            updateColor();
+            drawCircle(ctx, x, y, 2, color);
+
+            n++;
+
+            if (restart) {
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+                clearTimeout();
+                centerX = 200;
+                centerY = 150;
+                n = 0;
+                restart = false;
+                loop();
+            }
+        }
+
+        // helpers
+        function dtr(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        function drawCircle(ctx, x, y, radius, color) {
+            ctx.save();
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function canvasClicked(e) {
+			let rect = e.target.getBoundingClientRect();
+			mouseX = e.clientX - rect.x;
+			mouseY = e.clientY - rect.y;
+			console.log(mouseX, mouseY);
+
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            clearTimeout();
+            if(window.innerWidth >= window.innerHeight) {
+                centerX = mouseX * (400 / (0.75 * window.innerWidth));
+                centerY = mouseY * (400 / (0.75 * window.innerWidth));
+            }
+            else {
+                centerX = mouseX * (400 / (0.75 * window.innerHeight));
+                centerY = mouseY * (400 / (0.75 * window.innerHeight));
+            }
+
+            console.log(mouseX, mouseY);
+
+            n = 0;
+            restart = false;
+            loop();
+		}
+
+    </script>
+</head>
+
+<body>
+    <div id="main">
+        <canvas id="canvas"></canvas>
+        <button id="restart">Restart</button>
+        <div id="ranges">
+            <div id="divergence">
+                <input id="slider1" type="range" min="130.0" max="150.0" step="0.1" value="137.5"></input>
+                <p></p>
+            </div>
+            <div id="c">
+                <input id="slider2" type="range" min="3" max="5" step="0.1" value="4"></input>
+                <p></p>
+            </div>
+            <div id="speed">
+                <input id="slider3" type="range" min="10" max="200" value="60"></input>
+                <p></p>
+            </div>
+            Colors:
+            <select id="colors">
+                <option value="1">Rainbow</option>
+                <option value="2">Blue-Magenta</option>
+            </select>
+            Color Progression:
+            <select id="progression">
+                <option value="1">Gradient</option>
+                <option value="2">Pinwheel</option>
+            </select>
+            <p><b>Changes made:</b><br>
+           <br> - ‎ Clicking on canvas restarts simulation 
+           <br>‎ ‎ ‎ centered on mouse location, and 
+           <br>‎ ‎ ‎ pressing "Restart" re-centers it in canvas
+           <br> - ‎ Pretty much added all the controls I could
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
