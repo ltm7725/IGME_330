@@ -1,0 +1,83 @@
+
+New audio effect nodes:
+	- Treble: High-pass filter with 0-100% slider increment
+	- Bass: Low-pass filter with 0-100% slider increment
+	- Distortion: Wave-reshaper fiter with 0-100% slider increment (automatically adjusts Volume beyond
+	  normal limits for hearability; warning included on the UI to prevent inadvertent loss of
+	  permanent hearability)
+
+Sprite class:
+	- Called twice (2 INSTANCES) in visualizer; square sprite on top and circle sprite on bottom for
+	  emitting effect
+	- Named "Sprite"
+	- Held within module (src/sprite.js)
+	- Given a bunch of parameters, prints to the screen audio-responsive sprites of TWO kinds
+	- Properties:
+		- x,y (number): location of *center* of the sprite on canvas
+		- colors: an *array* of literally any size possible; an individual component of the sprite
+		  is created in a given color and individually responsive to audio, so the more you add the
+		  more complex it gets, and there's really no limit to that
+		- maxScale (number): maximum width/height or radius of the sprite (increasing from 0 at start)
+		- type (string): Denotes the type of sprite, either "circles" (responsive circles within
+		  circles) or "squares" (responsive squares within squares)
+		- tiltAngle (number, default = 0): (Only really visible within "squares" type) The number of
+		  degrees by which each smaller component within the base iteratively rotates further
+		- totalRotation (number, default = 0): (Also only really visible within "squares" type) The
+		  number of degrees by which the collective sprite is rotated in place before being drawn
+		- devSprite (boolean): Denotes whether given sprite is related to this project, and requires
+		  certain small fixes for consistent width/height in inversely interpreting the audio data
+		- Parameters defined within class:
+			- minScale (number): value used for calculations in methods (near 0; makes 
+			  MOST versions of visualizer component disappear when not responsive)
+			- done (boolean array, all false to start): Triggers an action within draw() and 
+			  gets set to true within ONLY 1st draw cycle; used for testing initial values
+			- swapAngle (number, originally == tiltAngle): When set to something other than
+			  the value of tiltAngle (changed whenever square rotation angle is changed by user)
+			  triggers code to replace tiltAngle at the start of draw(), to ensure the same 
+			  tiltAngle is used for each full frame of the sprite
+	- Methods:
+		- update(updatePackage): Takes in an array of values/objects from the draw() method required
+		  for functioning, creates and calculates variables used in draw() and returns an array of
+		  those values to later be deconstructed and used within draw()
+		- draw(ctx, audioData, params): Takes in the canvas element context reference, current
+		  audio byte data array, and drawing parameters, calls update() to handle value updating, re-
+		  assigns them to values in the function by destructuring an array that returns from it, and
+		  draws everything necessary (# of things = the number of items in the colors[] array); draws
+		  the circle or square visualizer depending on what was indicated in the object declaration
+	- What it does: in a loop, creates proportionally-sized audio-responsive (get larger with greater
+	  waveform intensity/frequency values) shapes within the base shape, in order to achieve mostly
+	  equal-sized rings (or sections/spaces in the case of the "squares" type). A circle sprite works very
+	  similarly to the center of the visualizer in the starting code, but with less limits with choices 
+	  in creating them. This process is essentially the same for the "squares" type, but you may also set 
+	  an incremental tilt angle for the smaller squares and overall rotation for the sprite, which creates 
+	  some INCREDIBLY cool and greatly varied effects with different parameters. Each section of a 
+	  sprite's fillStyle property is also a radial gradient, so that each piece fades out from the 
+	  intended color into transparency at the edges
+
+JSON File (data-av.json) includes the keys/data:
+	- "title": The title of the page (string)
+	- "tracks": The names of each file (string array)
+	- "files": The URLs to each file (array); respective to entries in "tracks" for quick assignment
+	- "distortion-warning": A string of text included on the UI, warning the user to watch their ears if
+	  they turn Distortion up a lot as Volume automatically increases with it for hearability
+
+Improved Aesthetics (Graded 15/15%)
+	- Went for a color pallette similar to the one I used in the homework (I don't think it's TOO bright)
+	- Made the bar visualizers stretch to the far ends of the canvas, and draw higher in the positive
+	  direction and lower in the negative direction so that you can see a difference between the ends
+	- Added a checkbox for squares visualizer
+	- Added several audio sliders to allow user to incrementally modify audio attributes (treble, bass, 
+	  distortion) with a warning regarding the distortion slider
+	- Added a complex square-based visualizer at canvas center (and an emission circle-based visualizer 
+	  behind it), with a slider in the UI which allows you to choose the amount of degrees by which each 
+	  square inside the base incrementally rotates
+	- Added visual switch to swap between frequency and waveform-based audio data for visualization
+	- Added a checkbox to enable inverse data interpretation for visualizers
+	- Added a switch for "vortex mode" in the UI to change the gradient used to draw each square in
+	  the square visualizer to a vortex-like shape
+	- Largely re-organized the UI in "Portrait Mode", with a gradient background, rounded/themed elements
+	  and a "floating" canvas
+	- Added a "Landscape" mode; automaticall activates when the window becomes to short, and allows
+	  controls to be shown on top of the canvas with a button (all error-checked for transitions
+	  between configurations)
+	- Made it so the Play button actually goes back to its original state automatically when a song ends
