@@ -1,0 +1,6 @@
+{
+    "title" : "A Cool Little Audio Visualizer",
+    "tracks" : ["New Adventure Theme", "Number, Number", "Peanuts Theme", "The Picard Song"],
+    "files" : ["media/New Adventure Theme.mp3", "media/Number, Number.mp3", "media/Peanuts Theme.mp3", "media/The Picard Song.mp3"],
+    "distortion-warning" : "<i>*For hearability, turning up <br>Distortion boosts Volume beyond normal limits; watch your ears!!*</i>"
+}

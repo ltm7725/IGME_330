@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <link href="./styles/default-styles.css" type="text/css" rel="stylesheet" />
+  <script src="./src/index.js" type="module"></script>
+</head>
+
+<body>
+  <main>
+    <div id="app">
+      <div id="top-shadow-div"></div>
+      <div id="pop-controls"></div>
+      <canvas width="800" height="400"></canvas>
+      <section id="controls">
+        <div id="switch-div">
+          <div id="switch-top">
+            <h3>Visualization type</h3>
+            <p><b><u>Frequency Data</u></b></p>
+            <button id="switch"><img id="switch-img" src="media/switch-up.png"></img></button>
+            <p><b><u>Waveform Data</u></b></p>
+          </div>
+          <div id="inv-interp"><div><label for="inv-interp-switch"><i>Inverse data interpretations</i></label></div><input type="checkbox" id="inv-interp-switch"><br></div>
+          <div id="vortex"><input type="checkbox" id="inv-interp-switch"><br><div><label for="vortex-switch"><i>Square vortex mode</i></label></div></div>
+        </div>
+        <section id="main-controls">
+          <div>
+            <div id="top-buttons">
+              <div id="buttons">
+                <button id="play-button" data-playing="no"></button>
+                <button id="fs-button">Full Screen</button>
+                <button id="controls-button">Open<br>Controls</button>
+              </div>
+            </div>
+            <div id="track-ph-div"></div>
+            <label id="track">Track: <br>
+              <select id="track-select">
+              </select>
+            </label>
+          </div>
+          <div id="bottom-controls">
+            <div id="sliders">
+              <div id="volume">
+                <p>Volume:</p> <input type="range" id="volume-slider" min="0" max="2" value="0.2" step="0.01">
+                <span id="volume-label">10%</span>
+              </div>
+              <div id="treble">
+              <p>Treble:</p> <input type="range" id="treble-slider" min="0" max="100" value="0" step="1">
+                <span id="treble-label">0%</span>
+              </div>
+              <div id="bass">
+              <p>Bass:</p> <input type="range" id="bass-slider" min="0" max="100" value="0" step="1">
+                <span id="bass-label">0%</span>
+              </div>
+              <div id="distortion">
+              <p>Distortion:</p> <input type="range" id="distortion-slider" min="0" max="100" value="0" step="1">
+                  <span id="distortion-label">0%</span>
+                </div>
+            </div>
+            <div id="square-angle">
+              <p>Rotation angle for squares:</p><br> <div><input type="range" id="square-angle-slider" min="0" max="90" value="45" step="1">
+                  <span id="square-angle-label">46°</span></div>
+            </div>
+            <p id="warning"></p>
+          </div>
+        </section>
+        <div id="checkboxes">
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="gradient-cb" checked="true"><label for="gradient-cb" class="css-label">Show Gradient</label></span>
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="bars-cb" checked="true"><label for="bars-cb" class="css-label">Show Bars</label></span>
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="circles-cb" checked="true"><label for="circles-cb" class="css-label">Show Circles</label></span>
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="squares-cb" checked="true"><label for="squares-cb" class="css-label">Show Squares</label></span>
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="noise-cb" checked="true"><label for="noise-cb" class="css-label">Show Noise</label></span>
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="invert-cb"><label for="invert-cb" class="css-label">Invert Colors</label></span>
+          <span><input class="css-checkbox" class="mac-style" type="checkbox" id="emboss-cb"><label for="emboss-cb" class="css-label">Emboss</label></span>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>
