@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+</head>
+<body>
+
+  <!-- Reference - https://bulma.io/documentation/components/navbar/ -->
+
+  <!-- Should be <nav class="navbar has-shadow is-white"> but my stylesheet uses dark mode -->
+  <nav class="navbar has-shadow is-primary-dark">
+    <!-- logo / brand -->
+    <div class="navbar-brand">
+      <a class="navbar-item">
+        <img src="assets/logo_light.png" alt="site logo" style="max-height: 70px" class="py-2 px-2">
+      </a>
+      <a class="navbar-burger" id="burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" id="nav-links">
+      <!-- Can also do <div class="navbar-start"> -->
+      <div class="navbar-end">
+        <a class="navbar-item">My Account</a>
+        <a class="navbar-item">Shopping Cart (0)</a>
+      </div>
+    </div>
+  </nav>
+
+    
+  <script src="index.js"></script>
+</body>
+</html>
