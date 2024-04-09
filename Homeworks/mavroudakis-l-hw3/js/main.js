@@ -504,6 +504,8 @@ function loadData() {
 //Loop that checks anything that needs to change on a dime
 function foreverLoop() {
 
+    console.log(colorPicker.color.hsl['l']);
+
     const x = window.matchMedia("(min-aspect-ratio: 1000/721)");
     const y = window.matchMedia("(max-height: 490px)");
 
@@ -894,7 +896,7 @@ function gameLoop() {
     }
     else document.querySelector("#distance").style.display = "block";
 
-    if (theColor[5] > 48) {
+    if (theColor[5] > 49) {
         document.querySelector("#testPatch").style.color = "rgb(34, 34, 34)";
         document.querySelector("#testPatch").style.borderColor = "rgb(100, 100, 100)";
     }
