@@ -1,0 +1,59 @@
+h1{
+    color: white;
+    margin-top: 5vw;
+    font-size: 3vw;
+}
+h2{
+    margin-bottom: 3vw;
+    font-size: 2vw;
+}
+ul{
+    margin-top: -2vw;
+}
+html{
+    display: flex;
+    font-family: Courier,mono;
+    font-weight: bolder;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5vw;
+}
+p{
+    text-align: left;
+    margin: 3vw 5vw;
+}
+a:link, a:visited, a:focus, a:hover, a:active{
+    color: white;
+}
+.logo{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+#toph1{
+    margin-top: 51vw;
+}
+.withH2{
+    margin-top: -2vw;
+}
+img{
+    width: 80%;
+}
+#face{
+    width: 20%;
+    margin-top: -2.5vw;
+    transform: rotateX(180deg);
+    filter: drop-shadow(2vw 0 rgba(0,0,0,0.75));
+}
+#devlog{
+    text-align: left;
+    margin: 0 5vw 3vw 5vw
+}
+.indent{
+    margin-left: 3vw;
+}
+footer{
+    height: 5vw;
+}
