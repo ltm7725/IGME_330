@@ -1,0 +1,435 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  text-decoration: inherit;
+}
+
+a:hover {
+	text-decoration: underline dashed;
+	text-underline-offset: 0.25rem;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+#cmby, #s {
+}
+
+.up, .down, .up:hover, .down:hover {
+	background-repeat: no-repeat;
+}
+
+#game-div {
+	margin-top: 0;
+	max-width: 100vw;
+}
+
+#color-values, #description {
+	display: none;
+}
+
+#left-col {
+	text-align: center;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#guess-number {
+	margin: 0 auto;
+	height: 5rem;
+	line-height: 5rem;
+	width: 10rem;
+	color: white;
+}
+
+#guess-number u {
+	color: white;
+}
+
+#guess-button {
+	font-weight: 500;
+	padding: 0;
+	color: white;
+}
+
+#the-clue, #the-word {
+	margin: 0 auto;
+	line-height: 4.5rem;
+	border-radius: 5rem;
+}
+
+#high-or-low {
+	margin: 0 auto;
+	padding-top: 0.75rem;
+	max-width: 23rem;
+	text-align: left;
+	align-items: center;
+	justify-content: center;
+	border-radius: 2rem;
+}
+
+#patches {
+	display: flex;
+	justify-content: center;
+}
+
+#picker {
+	position: relative;
+}
+
+#history-patch {
+	display: none;
+}
+
+#test-patch, #history-patch {
+	min-width: 10rem;
+	border-radius: 1rem;
+	height: 5rem;
+	line-height: 5rem;
+}
+
+#contrast-patch {
+	display: none;
+}
+
+#s {
+	display: none;
+}
+
+.navbar-brand .navbar-item {
+	content: url("../media/Loading.gif");
+	width: 3.5rem;
+	height: 3rem;
+	margin-left: 1rem;
+}
+
+.navbar-burger {
+	content: url("../media/icons8-menu-240.png");
+	width: 2rem;
+	height: 2rem;
+	opacity: 66%;
+}
+
+.navbar-start {
+	text-align: right;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+body {
+	min-height: 100vh;
+}
+
+#main-buttons {
+	display: flex;
+	justify-content: center;
+}
+
+.no-borders {
+	margin: 0;
+}
+
+#logos {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+#logo-2 {
+	margin-bottom: 1vw;
+}
+
+#game, #tutorial-screen{
+	display: none;
+	flex-direction: column;
+	align-items: center;
+}
+
+#cp {
+	display: flex;
+	flex-direction: row;
+}
+
+#loading-gif {
+	display: none;
+	position: absolute;
+	width: 13rem; /*Can change at any time while keeping centered*/
+}
+
+#game-div {
+	height: auto;
+}
+
+#distance {
+	margin: 0 auto;
+	width: 25rem;
+	font-weight: 500;
+	border-radius: 1rem;
+	line-height: 3rem;
+}
+
+#end-game {
+	position: relative;
+	top: 1rem;
+	transform: translateY(-0.6rem);
+	cursor: default;
+	display: none;
+	flex-flow: column;
+	padding: 5rem;
+	background-color:gray;
+	justify-content: center;
+	border-radius: 15rem;
+	align-items: center;
+}
+
+#end-game p {
+	text-align: center;
+	font-size: 8vw;
+	float: left;
+	color: white;
+	margin-top: 0;
+}
+
+#color-titles{
+	display: flex;
+	flex-flow: row;
+}
+#color-title-1, #color-title-2{
+	float: left;
+	font-size: 4.5vw;
+	text-underline-offset: 0.5rem;
+	text-decoration: underline;
+	margin: 0 1vw 1vw 1vw;
+	color: white;
+}
+
+#guess-color {
+	border-top-left-radius: 5rem;
+	border-bottom-left-radius: 5rem;
+}
+
+#answer-color {
+	border-top-right-radius: 5rem;
+	border-bottom-right-radius: 5rem;
+}
+
+#guess-color, #answer-color{
+	float: left;
+	width: 23vw;
+	height: 23vw;
+	margin: 0;
+	background-color: #0a0;
+}
+
+#values-box {
+	background-color: gray;
+	width: 11.75rem;
+	position: absolute;
+	border-radius: 2rem;
+	height: 19rem;
+}
+
+#r-label {
+	padding-top: 0.25rem;
+}
+
+#r-label, #b-label, #g-label {
+	transform: translateX(-4.3rem);
+}
+
+#h-label {
+	transform: translate(-0.4rem);
+}
+
+.arr-label {
+	font-weight: bold;
+	font-style: italic;
+	z-index: -1;
+	margin-bottom: -21%;
+}
+
+#forward-guess, #back-guess {
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: 2.75rem;
+	height: 2.75rem;
+	position:relative;
+}
+ #back-guess {
+	top: 1.25rem;
+	left: 0.25rem;
+ }
+
+ #forward-guess {
+	top: -4.8rem;
+	left: 7.1rem;
+ }
+
+.arr-text {
+	z-index: 1;
+	text-align: center;
+	width: 5rem;
+	position: absolute;
+	transform: translateY(-18%);
+	left: 4.5rem;
+	text-decoration: underline double;
+	text-underline-offset: 0.25rem;
+}
+
+.up {
+	margin-bottom: 0.1rem;
+	margin-top: -0.1rem;
+}
+
+.up, .down {
+	position: relative;
+	z-index: 20;
+	width: 2rem;
+	height: 1.2rem;
+	margin-left: 2.75rem;
+	background-size: 100%;
+}
+
+/**/
+
+#past-games{
+	cursor: default;
+	float: left;
+	display: block;
+	justify-content: center;
+	background-color:lightgray;
+	border-radius: 10rem;
+	padding-left: 1.5rem;
+	max-width: 100vw;
+	transform: translateX(-0.66rem);
+}
+#past-games h1{
+	margin-top: 1vw;
+}
+#past-games div{
+	color: white;
+}
+
+#history{
+	clear: left;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+	padding-bottom: 3rem;
+}
+#history > div{
+	position: static;
+	width: 14rem;
+	text-align: center;
+	margin: 4rem 1rem -3rem 1rem;
+}
+
+#history div div{
+	height: 7rem;
+}
+
+footer p {
+	font-weight: 500;
+}
+
+#history p{
+	margin-top: 1rem;
+	margin-bottom: 0.25rem;
+}
+
+.history-text i {
+	font-weight: 500;
+}
+
+#main-footer{
+	float: left;
+	clear: left;
+	/* width: 100%; */
+	background-color: white;
+	text-align: center;
+	/* font-size: 1.5vw; */
+	padding: 3%;
+	border-radius: 5rem;
+}
+#main-footer p{
+	text-align: left;
+}
+
+#parent-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
+.IroColorPicker {
+	width: 100%;
+	height: 100%;
+}
+
+#circle {
+    margin-top: 0.2rem;
+}
+
+#past-games-i {
+	padding-top: 1rem;
+}
+

@@ -1,0 +1,227 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMBYS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" href="media/favicon-16x16.png">
+  <link rel="icon" href="media/favicon-32x32.png">
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script src="https://colorjs.io/dist/color.global.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+  <script defer src="libs/rgbToHex.js"></script>
+  <script src="js/main.js" type="module"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+  <!-- Reference - https://bulma.io/documentation/components/navbar/ -->
+
+  <!-- Should be <nav class="navbar has-shadow is-white"> but my stylesheet uses dark mode -->
+  <nav class="navbar has-shadow is-primary-dark">
+    <!-- logo / brand -->
+    <div class="navbar-brand">
+      <a class="navbar-item" href="home.html">
+        <i class="fas fa-hotdog"></i>
+      </a>
+      <a class="navbar-burger" id="burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" id="nav-links">
+      <div class="navbar-start">
+        <a class="navbar-item is-hoverable" href="home.html">
+          Home
+        </a>
+
+        <a class="navbar-item is-hoverable" href="about.html">
+          About The Game
+        </a>
+      </div> <!-- end navbar-start -->
+    </div>
+  </nav>
+
+  <!-- product info -->
+  <!-- References: 
+  https://bulma.io/documentation/columns/
+  https://bulma.io/documentation/columns/basics/
+  https://bulma.io/documentation/columns/sizes/
+  -->
+
+  <!--Start game code-->
+
+  <section class="section" id="main-menu" style="width: 100%;">
+    <div class="container my-3" style="margin: 0; padding: 0">
+      <div class="columns is-vcentered" style="width: 100vw">
+        <div class="column is-full" style="padding: 0;">
+          <div id="logos">
+            <img class="big-logo" id="cmby" src="media/cmby.svg"
+              alt="4/5 of the logo to the movie 'Call Me By Your Name'">
+            <img class="big-logo" id="s" src="media/s.svg" alt="1/5 of the logo to the movie 'Call Me By Your Name'">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" id="interactive">
+      <h2 class="is-size-3 has-text-centered my-3" id="tagline">The phrase-to-color game you didn't know you didn't need
+      </h2>
+      <div id="main-buttons">
+        <button class="button is-primary is-large mx-2" id="start">Play</button>
+        <button class="button is-info is-large mx-2" id="change-color">Change Color</button>
+        <!-- <button class="button is-warning is-large mx-2" id="help">Help</button> -->
+      </div>
+    </div>
+    <div class="container my-4" id="past-games">
+      <h1 class="has-text-centered is-size-3">↓ <i>Past Games</i> ↓</h1>
+      <div id="history"></div>
+    </div>
+    <div class="container">
+      <footer class="my-1 is-size-5 mb-4" id="main-footer">
+        <p class="is-size-5">In <i><u>Call Me By Your Shade</u></i>—named cheaply after a seemingly good movie that I
+          haven't gotten to
+          see yet—you're given a pseudo-random phrase associated with a color in some way; your goal is to use the
+          color controlls provided to match the secret color as close as you possibly can. Hints are provided after
+          each of your 10 guesses, in the form of percentage in general-closeness and high-or-low position of color
+          values (RGB/HSL). <b>Can you find the color? Try it out!!</b></p><br>
+        <a href="https://people.rit.edu/ltm7725/235/project3/about.html" target="_blank">Documentation</a><br>
+        Colors & names from <a href="https://github.com/meodai/color-names" target="_blank">Color-Names API</a> by <a
+          href="https://xn--w-25a.elastiq.ch/" target="_blank">David Aerne</a><br>
+        Buttons from <a href="https://icons8.com/" target="_blank">Icons8</a><br>
+        Sounds from <a href="https://mixkit.co/" target="_blank">Mixkit</a><br>
+        <a href="https://iro.js.org/" target="_blank">Color Picker</a> by <a href="https://jamesdaniel.dev/"
+          target="_blank">James Daniel</a><br>
+        © L. Mavroudakis 2022-2024
+      </footer>
+    </div>
+  </section>
+
+  <section class="section" id="game">
+    <div class="container" id="game-div">
+      <div class="columns">
+        <div class="column is-5" id="left-col">
+          <div class="holder">
+            <div id="guess-number" class="is-size-2"><u>1 / 10</u></div>
+            <div id="num-back"></div>
+            <div id="the-word" class="is-size-2">
+              <img id="loading-gif" src="media/Loading.gif" alt="rainbow loading graphic">
+              <p id="the-clue" class="is-size-2">Your clue is...<br><br></p>
+            </div>
+            <div id="distance" class="is-size-4 my-3 px-2"></div>
+            <div id="patches">
+              <div class="is-size-3 mx-2 my-2" id="test-patch" style="color: rgb(34, 34, 34);">#A1A8CC
+              </div>
+              <div class="is-size-3 mx-2 my-2" id="history-patch">
+                <div id="back-guess"></div>
+                <p>1/10</p>
+                <div id="forward-guess"></div>
+              </div>
+            </div>
+            <div id="rollover-div"></div>
+            <button class="is-size-1 my-2 px-2" id="guess-button"><i>Take A Guess</i></button>
+            <div id="high-or-low">
+              <p id="hol" class="is-size-4"></p>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half mx-2" id="cp">
+
+          <div id="arrows">
+            <div id="values-box">
+              <div class="arr-label is-size-3" id="r-label">R </div>
+              <div class="arr-text is-size-3" id="r-text">255</div>
+              <div id="rup" class="up"></div>
+              <div id="rdown" class="down"></div>
+              <div class="arr-label is-size-3" id="g-label">G </div>
+              <div class="arr-text is-size-3" id="g-text">255</div>
+              <div id="gup" class="up"></div>
+              <div id="gdown" class="down"></div>
+              <div class="arr-label is-size-3" id="b-label">B </div>
+              <div class="arr-text is-size-3" id="b-text">255</div>
+              <div id="bup" class="up"></div>
+              <div id="bdown" class="down"></div>
+              <div class="arr-label is-size-3" id="h-label">H ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ °</div>
+              <div class="arr-text is-size-3" id="h-text">0</div>
+              <div id="hup" class="up"></div>
+              <div id="hdown" class="down"></div>
+              <div class="arr-label is-size-3" id="s-label">S ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ %</div>
+              <div class="arr-text is-size-3" id="s-text">0</div>
+              <div id="sup" class="up"></div>
+              <div id="sdown" class="down"></div>
+              <div class="arr-label is-size-3" id="l-label">L ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ %</div>
+              <div class="arr-text is-size-3" id="l-text">100</div>
+              <div id="lup" class="up"></div>
+              <div id="ldown" class="down"></div>
+            </div>
+          </div>
+
+          <div id="color-picker">
+            <div id="picker"></div>
+          </div>
+
+          <div id="color-squares">
+            <div style="background-color: rgb(243, 32, 224);"></div>
+            <div style="background-color: rgb(79, 55, 153);"></div>
+            <div style="background-color: rgb(102, 254, 145);"></div>
+            <div style="background-color: rgb(164, 251, 149);"></div>
+            <div style="background-color: rgb(79, 24, 196);"></div>
+            <div style="background-color: rgb(82, 55, 19);"></div>
+            <div style="background-color: rgb(130, 170, 160);"></div>
+            <div style="background-color: rgb(130, 120, 160);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="color-values">rgba(161,168,204,0.8)
+        hsva(230,21,80,0.8)
+        hsla(230,29%,72%,0.8)
+        CMYK(21,17,0,20)
+        CMY(37,34,20)
+        Lab(70,5,-19)
+      </div>
+
+      <div id="description"><select></select></div>
+
+      <script src="libs/colorPicker-master/colors.js"></script>
+      <script src="libs/colorPicker-master/colorPicker.data.js"></script>
+      <script src="libs/colorPicker-master/colorPicker.js"></script>
+      <script src="libs/colorPicker-master/index.js"></script>
+
+      <div class="cp-opacity" style="background-color: rgb(159, 131, 205);"></div>
+      <div class="cp-exit"></div>
+      <div class="cp-resize"></div>
+      <div class="cp-resizer">
+        <div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container" id="end-game">
+      <p></p>
+      <div id="color-titles">
+        <div id="color-title-1">Your Color</div>
+        <div id="color-title-2">Real Color<br></div>
+      </div>
+      <div id="colors">
+        <div id="guess-color"></div>
+        <div id="answer-color"></div>
+      </div>
+      <button class="button my-4 is-large" id="back-to-menu">Back to Menu</button>
+    </div>
+  </section>
+
+
+</body>
+
+</html>

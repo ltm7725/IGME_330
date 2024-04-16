@@ -297,53 +297,107 @@ function hexToRgb(hex) {
     : null;
 }
 
-$(document).ready(() => {
-
-  let i = Math.ceil(Math.random() * 2);
-  
-  var c = $('#past-games').css('color');
-  var rgb = c.replace(/^rgba?\(|\s+|\)$/g,'').split(',');
-
-  if (rgb.length !== 3) {
-    alert('Invalid format!');
-    return;
-  }
-
-  let color = new Clr(rgb[0], rgb[1], rgb[2]);
-  let solver = new Solver(color);
-  let result = solver.solve();
-
-  if(i == 1) c = $('#cmby').attr('style', result.filter);
-  else{
-    c = $('#s').attr('style', result.filter);
-  }
-  
-
-  c = $('#start').css('backgroundColor');
-  rgb = c.replace(/^rgba?\(|\s+|\)$/g,'').split(',');
-
-  if (rgb.length !== 3) {
-    alert('Invalid format!');
-    return;
-  }
-
-  color = new Clr(rgb[0], rgb[1], rgb[2]);
-  solver = new Solver(color);
-  result = solver.solve();
-
-  if(i == 1){
-    c = $('#s').attr('style', result.filter);
-  }
-  else c = $('#cmby').attr('style', result.filter);
-});
-
 let changeSVG = () => {
+
+  //L. Mavroudakis code start
+
+  // Get random color
+  let h = Math.random() * 360 - 5;
+  let s = Math.random() * 35 + 15;
+  let l = Math.random() * 15 + 45;
+
+  let color1 = new Color("hsl", [h, s, l]);
+  let r = color1.a98rgb[0];
+  let g = color1.a98rgb[1];
+  let b = color1.a98rgb[2];
+  let hex = convertRGBtoHex(r, g, b);
+
+  if (l - 10 < 50) {
+    document.querySelector("#past-games").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+    document.querySelector("#change-color").style.color = "white"
+  }
+  else {
+    document.querySelector("#past-games").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 40) + "%)";
+    document.querySelector("#change-color").style.color = "black"
+  }
+
+  if (l - 15 < 50) {
+  }
+  else {
+    document.querySelector("#main-footer").style.color = "black";
+  }
+
+  if (l - 20 < 50) {
+    document.querySelector("#start").style.color = "white"
+  }
+  else document.querySelector("#start").style.color = "black"
+
+  //Unless there's a better way to set CSS through javascript that I'm not aware of, this is necessary unfortunately
+
+  
+  document.querySelector("#start").style.backgroundColor = "hsl(" + (h + 7.5) + "," + s + "%," + (l - 20) + "%)";
+  document.querySelector("#change-color").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
+  //document.querySelector("#main-menu").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  //uncomment later document.querySelector("#main-footer").style.backgroundColor = "hsl(" + (h + 12.5) + "," + s + "%," + (l - 15) + "%)";
+  document.querySelector("#past-games").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
+  //document.querySelector("#main-menu").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  // document.querySelector("#help").style.backgroundColor = "hsl(" + (h + 12.5) + "," + s + "%," + (l - 10) + "%)";
+  document.querySelector("#main-footer").style.backgroundColor = "hsl(" + (h - 5) + "," + s + "%," + (l + 10) + "%)";
+  for(let a of document.querySelectorAll("#main-footer a")) a.style.color = "hsl(" + (h + 7.5) + "," + (s + 20) + "%," + (l - 20) + "%)";
+  document.body.style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  //document.querySelector("#hideCursorGlitchDiv").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
+  document.querySelector("#values-box").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#num-back").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#guess-number").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#guess-button").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#guess-button").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  // document.querySelector("#tut-button-1").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  // document.querySelector("#tut-button-1").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  // document.querySelector("#tut-button-2").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  // document.querySelector("#tut-button-2").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  // document.querySelector("#tut-button-3").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  // document.querySelector("#tut-button-3").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  // document.querySelector("#tut-button-4").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  // document.querySelector("#tut-button-4").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  // document.querySelector("#tut-button-5").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  // document.querySelector("#tut-button-5").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  document.querySelector("#the-word").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#the-word").style.backgroundColor = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
+  document.querySelector("#the-word").style.border = "solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#high-or-low").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#distance").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#distance").style.backgroundColor = "white";
+  document.querySelector("#guess-color").style.borderLeft = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#guess-color").style.borderTop = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#guess-color").style.borderBottom = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#guess-color").style.borderRight = "none";
+  document.querySelector("#answer-color").style.borderRight = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#answer-color").style.borderTop = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#answer-color").style.borderBottom = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#answer-color").style.borderLeft = "none";
+  document.querySelector("#game-div").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
+  document.querySelector("#end-game").style.backgroundColor = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 30) + "%)";
+  document.querySelector("#end-game").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 15) + "%)";
+  document.querySelector("#end-game button").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#end-game button").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 30) + "%)";
+  document.querySelector("#color-title-1").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
+  document.querySelector("#color-title-2").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
+
+  // L. Mavroudakis code end
 
   if(!ix) ix = Math.ceil(Math.random() * 2);
   else if(ix == 1) ix = 2;
   else ix = 1;
   
-  var c = $('#past-games').css('color');
+  // This block - L. Mavroudakis
+  var c;
+  if (l - 10 <= 50) {
+    c = "rgb(" + new Color("hsl", [h + 5, s - 5, l + 15]).a98rgb[0] * 255 + "," + new Color("hsl", [h + 5, s - 5, l + 15]).a98rgb[1] * 255 + "," + new Color("hsl", [h + 5, s - 5, l + 15]).a98rgb[2] * 255 + ")"
+  }
+  else {
+      c = "rgb(" + new Color("hsl", [h + 5, s - 25, l - 40]).a98rgb[0] * 255 + "," + new Color("hsl", [h + 5, s - 25, l - 40]).a98rgb[1] * 255 + "," + new Color("hsl", [h + 5, s - 25, l - 40]).a98rgb[2] * 255 + ")"
+  }
+  
   var rgb = c.replace(/^rgba?\(|\s+|\)$/g,'').split(',');
 
   if (rgb.length !== 3) {
@@ -360,8 +414,7 @@ let changeSVG = () => {
     c = $('#s').attr('style', result.filter);
   }
   
-
-  c = $('#start').css('backgroundColor');
+  c = "rgb(" + new Color("hsl", [h + 7.5, s, l - 20]).a98rgb[0] * 255 + "," + new Color("hsl", [h + 7.5, s, l - 20]).a98rgb[1] * 255 + "," + new Color("hsl", [h + 7.5, s, l - 20]).a98rgb[2] * 255 + ")"
   rgb = c.replace(/^rgba?\(|\s+|\)$/g,'').split(',');
 
   if (rgb.length !== 3) {

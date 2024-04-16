@@ -1,68 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script defer src="js/doc.js"></script>
-        <title>CMBYS Documentation</title>
-        <link rel="icon" href="media/favicon-16x16.png">
-        <link rel="icon" href="media/favicon-32x32.png">
-        <script defer src="libs/docSVGColor.js"></script>
-        <link rel="stylesheet" href="css/doc.css">
-    </head>
-    <body>
-        <img class="logo" id="logo1" src="media/cmby.svg" alt="4/5 of the logo to the game Call Me By Your Shade">
-        <img class="logo" id="logo2" src="media/s.svg" alt="1/5 of the logo to the game Call Me By Your Shade">
-        <h2 id="toph1">V1 Can be found <a href=https://people.rit.edu/ltm7725/235/project2/index.html target="_blank">here</a>.</h2>
-        <h2 class="withH2">V2 Can be found <a href=https://people.rit.edu/ltm7725/235/project3/index.html target="_blank">here</a>.</h2>
-        <h1>In <i><u>'Call Me By Your Shade'</u></i></h1>
-        <p>—named cheaply after a seemingly good movie that I haven't gotten to see yet—you're given a pseudo-random phrase associated with a color in some way; your goal is to use the color controls provided to match the secret color as close as you possibly can. Hints are provided after each of your 10 guesses, in the form of percentage in general-closeness and high-or-low position of color values (RGB/HSL). Can you find the color?</p>
-        <h2>Genre: Puzzle, Strategy</h2>
-        <h2>Platform: Desktop-only</h2>
-        <h2>Aesthetics -</h2>
-        <p class="withH2">The current aesthetic of this site is very simple, with a monochrome color scheme. This is the general look that I will be sticking with, however if time allows I would like to add some further interactivity there.</p>
-        <h2>Gameplay -</h2>
-        <p class="withH2">Throughout the game, players will have full control of an in-depth color picker, including a hue wheel, 6 color sliders (for RGB/HSL values)--with incremental arrow buttons for each--, and a brightness slider. while the UI is quite straight-forward in itself, I may add a brief introduction widget that appears when it's the user's first time playing.</p>
-        <h1>Mockups</h1>
-        <p class="withH2" style="color:white">"PATTERN SPACE" Is the leftover space outside of the gameboard (which I may set at a static aspect ratio) where I hope to be able to place randomly-selected patterns based on scheme color.</p>
-        <img id="sketch1" src="media/Sketch1.png" alt="A sketch of the gameboard for CMBYS">
-        <img id="sketch2" src="media/Sketch2.png" alt="A sketch of the gameboard for CMBYS">
-        <h1>Other Information</h1>
-        <p class="withH2">This project will be a continuation of my Project 2, adding further functionality and cleaning things up throughout to (hopefully) hit all of the requirements asked of most others who are starting fresh. I messed with PixiJS for a while, and didn't really feel much excitement in making my own stuff on it, so with how happy I was with how my Project 2 came out, I figured there really wasn't any better option. Adding onto something that I've already made, though, I'm aware that a lot is going to have to change in order for my work to seem adequate compared to others', and I feel good in that because I have a lot of ideas I want to put into this. When it comes to code used for this project from others (of which all is directly credited), I have two generic libraries (jQuery and colorJS) and two more specific libraries (PitPik colorpicker and the SVG color function) that are already being used. I don't know yet what additional libraries I might want to add to this project from here on; those will likely come as soon as I realize I have a major functionality that's beyond my depth in coding, at least for a project of this particular depth. I'll speak with professors about that as the time comes.</p>
-        <h1><u>About the Developer</u></h1>
-        <a href="https://people.rit.edu/ltm7725/235/" target="_blank"><img id="face" src="media/face.png" alt="Face of L. Mavroudakis with a weird filter on it"></a>
-        <p class="withH2">My name is Luke Mavroudakis, and I'm a 2nd-year Game Design & Development student (with a recently-enrolled minor in Modern Language - Japanese) at Rochester Institute of Technology. Since coming to school I've *developed* a love for development, mainly in things I just think are cool like my concept for this project. I hope for that love (and some successful projects that come from it) to take me far in the future, but as I work on myself in the meantime I hope to integrate my older love for art/music into the mix in larger ways than I've had the chance to in the past.</p>
-        <h1><b>Development Log</b></h1>
-        <ul id="devlog">
-            <li>Replaced the game-screen layout with one mirroring my concept sketch<br></li>
-            <li class="indent">All values for positioning of the game-screen items had to be completely rewritten between screen aspect ratios that have longer width than height and vice versa, so I found a reliable way to have CSS calculate the equivalent value in terms of vw and vh, translating from one to another.</li>
-            <li class="indent">The screen now has a static layout, providing empty space where necessary to best center and fit the game-screen</li>
-            <li>Fixed a bug with the color-wheel implementation that made a click outside of it on one of its sliders to cause the selector in the color wheel to jump to the edge of the wheel closest to what was clicked on</li>
-            <li>Implemented (semi)-static color-wheel and brightness-slider cursor positions when in width-prominent aspect ratio, as they used to keep their top and left attributes static which would make them appear to fly away when changing window size in that case</li>
-            <li>Made the text and border on the testPatch change to dark gray when on a color with luminance higher than 50, and light gray when lower than 50</li>
-            <li class="indent">Also implemented into historyPatch once created</li>
-            <li>Added loading graphic to clue box before the clue loads in</li>
-            <li>Optimized clue printing to not cut words in half (though idk why it wasn't just doing that in the first place, I DELETED CODE)</li>
-            <li>Modified external color-picker code to make test patch color 100% opacity</li>
-            <li>Implemented a new menu layout specifically for round 1, with the guessButton in a more prominent position</li>
-            <li class="indent">Transitions to the default game layout, allowing space for the distance and highOrLow blocks, once incremented past round 1</li>
-            <li class="indent">Automatically resets to round 1 layout once game ends</li>
-            <li>Optimized dynamics of mainMenu</li>
-            <li class="indent">Added media query to ensure nothing (untasefully) overlaps before the designated breaking point (height less than 400px)</li>
-            <li class="indent">Made the CMBYS logo able to dark/light on either of its components, based on a randomizer; the text below automatically turns light/dark to contrast the "SHADE" piece due to them needing to overlap at certain window aspect ratios</li>
-            <li>Meticulously touched up automatic site color pallette algorithm</li>
-            <li>Added back and forward functionality (via a custom ES6 class, colorGuess) to historyPatch to view all past guesses for a given round</li>
-            <li class="indent">The highOrLow panel now also indicates the "high or low" comparisons (as well as RGB/HSL values) of present OR PAST guess, whatever is currently displayed on the historyPanel</li>
-            <li>Finally fixed the last bit of bugginess with the color wheel cursor (I think)</li>
-            <li>Conquered the beast!!! (FINALLY figured out how to utilize the colorPicker code to alter RGB/HSL values incrementally with buttons on the game screen)</li>
-            <li>Implemented tutorial "slideshow" (Help button)</li>
-            <li>Swapped APIs, as I realized the one I've been using is not reliable for it's purpose</li>
-            <li class="indent"><a href="https://www.colourlovers.com/api" target="_blank">ColourLovers API</a> ---> <a href="https://github.com/meodai/color-names" target="_blank">Color-Names API</a> by <a href="https://xn--w-25a.elastiq.ch/" target="_blank">David Aerne</a></li>
-            <li class="indent">So many more actually color-derivative phrases, and actually allows for randomized output (unlike the other)</li>
-            <li class="indent">It's probably not the best to swap something like that out last minute, but it's pretty much the core piece of the game so this kind of brings the whole quality of the project a step up</li>
-            <li class="indent">API data still fetched with jQuery in the exact same method, doing the exact same things as before</li>
-            <li>Added game clues to local storage and Game History panel</li>
-        </ul>
-        <footer></footer>
-    </body>
+
+<head>
+  <meta charset="UTF-8">
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script defer src="js/doc.js"></script>
+  <title>About CMBYS</title>
+  <link rel="icon" href="media/favicon-16x16.png">
+  <link rel="icon" href="media/favicon-32x32.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <script src="https://colorjs.io/dist/color.global.js"></script>
+  <script defer src="libs/docSVGColor.js"></script>
+  <link rel="stylesheet" href="src/doc.css">
+</head>
+
+<body>
+
+      <nav class="navbar has-shadow is-primary-dark">
+        <div class="navbar-brand">
+          <a class="navbar-item" id="circle" href="home.html">
+            <i class="fas fa-hotdog"></i>
+          </a>
+          <a class="navbar-burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
+        </div>
+
+        <div class="navbar-menu" id="nav-links">
+          <div class="navbar-start">
+            <a class="navbar-item is-hoverable" href="home.html">
+              Home
+            </a>
+
+            <a class="navbar-item is-hoverable" href="about.html">
+              About The Game
+            </a>
+          </div>
+        </div>
+      </nav>
+
+  <section class="section">
+    <div class="columns is-vcentered">
+      <div class="column">
+        <div class="hero is-large is-primary p-2">
+          <div class="hero-head">
+            <p class="title">
+              <u>Call Me By Your Shade</u><br>
+              <i id="subtitle" class="is-size-4">The phrase-to-color game you didn't know you didn't need</i>
+            </p>
+            <div id="logos" class="mb-3">
+              <img class="logo" id="logo-1" src="media/cmby.svg"
+                alt="4/5 of the logo to the game Call Me By Your Shade">
+              <img class="logo" id="logo-2" src="media/s.svg" alt="1/5 of the logo to the game Call Me By Your Shade">
+            </div>
+          </div>
+          <div class="hero-footer"><b>Contact: ltm7725@rit.edu</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <h2 id="top-h1">V1 Can be found <a href=https://people.rit.edu/ltm7725/235/project2/index.html
+      target="_blank">here</a>.</h2>
+  <h2 class="with-h2">V2 Can be found <a href=https://people.rit.edu/ltm7725/235/project3/index.html
+      target="_blank">here</a>.</h2>
+  <h1>In <i><u>'Call Me By Your Shade'</u></i></h1>
+  <p class="is-size-5">—named cheaply after a seemingly good movie that I haven't gotten to see yet—you're given a pseudo-random phrase
+    associated with a color in some way; your goal is to use the color controls provided to match the secret color as
+    close as you possibly can. Hints are provided after each of your 10 guesses, in the form of percentage in
+    general-closeness and high-or-low position of color values (RGB/HSL). Can you find the color?</p>
+  <h2 class="is-size-3"><b><u>Genre: Puzzle, Strategy</u></b></h2>
+  <h2 class="is-size-3"><b><u>Platform: Desktop-only (but maybe not for long...)</u></b></h2>
+  <h2 class="is-size-4">Aesthetics -</h2>
+  <p class="with-h2 is-size-5">The current aesthetic of this site is very simple, with a monochrome color scheme. This is the
+    general look that I will be sticking with, however if time allows I would like to add some further interactivity
+    there.</p>
+  <h2 class="is-size-4">Gameplay -</h2>
+  <p class="with-h2 is-size-5">Throughout the game, players will have full control of an in-depth color picker, including a hue
+    wheel, 6 color sliders (for RGB/HSL values)--with incremental arrow buttons for each--, and a brightness slider.
+    while the UI is quite straight-forward in itself, I may add a brief introduction widget that appears when it's the
+    user's first time playing.</p>
+  <h1 class="mb-5 is-size-2">Mockups</h1>
+  <p class="with-h2 is-size-5" style="color:white">"PATTERN SPACE" Is the leftover space outside of the gameboard (which I may set
+    at a static aspect ratio) where I hope to be able to place randomly-selected patterns based on scheme color.</p>
+  <img id="sketch-1" src="media/Sketch1.png" alt="A sketch of the gameboard for CMBYS">
+  <img id="sketch-2" src="media/Sketch2.png" alt="A sketch of the gameboard for CMBYS">
+  <h1 class="mb-5 is-size-3">Other Information</h1>
+  <p class="with-h2 is-size-5">This project will be a continuation of my Project 2 from IGME-235, adding further functionality and cleaning
+    things up throughout to (hopefully) hit all of the requirements asked of most others who are starting fresh. I
+    messed with PixiJS for a while, and didn't really feel much excitement in making my own stuff on it, so with how
+    happy I was with how my Project 2 came out, I figured there really wasn't any better option. Adding onto something
+    that I've already made, though, I'm aware that a lot is going to have to change in order for my work to seem
+    adequate compared to others', and I feel good in that because I have a lot of ideas I want to put into this. When it
+    comes to code used for this project from others (of which all is directly credited), I have two generic libraries
+    (jQuery and colorJS) and two more specific libraries (PitPik colorpicker and the SVG color function) that are
+    already being used. I don't know yet what additional libraries I might want to add to this project from here on;
+    those will likely come as soon as I realize I have a major functionality that's beyond my depth in coding, at least
+    for a project of this particular depth. I'll speak with professors about that as the time comes.</p>
+  <h1 class="is-size-2"><u>About the Developer</u></h1>
+  <a href="https://people.rit.edu/ltm7725/235/" target="_blank"><img id="face" src="media/face.png"
+      alt="Face of L. Mavroudakis with a weird filter on it"></a>
+  <p class="with-h2 is-size-5">My name is Luke Mavroudakis, and I'm a 3rd-year Game Design & Development student at Rochester Institute of Technology, with minors in Modern Language - Japanese and Women & Gender Studies. Since coming to school
+    I've *developed* a love for development, mainly in things I just think are cool like my concept for this project. I
+    hope for that love (and some successful projects that come from it) to take me far in the future, but as I work on
+    myself in the meantime I hope to integrate my older love for art/music into the mix in larger ways than I've had the
+    chance to in the past.</p>
+  <h1 class="is-size-1"><b>Development Log</b></h1>
+  <ul id="devlog" class="is-size-5">
+    <li>Replaced the game-screen layout with one mirroring my concept sketch<br></li>
+    <li class="indent">All values for positioning of the game-screen items had to be completely rewritten between screen
+      aspect ratios that have longer width than height and vice versa, so I found a reliable way to have CSS calculate
+      the equivalent value in terms of vw and vh, translating from one to another.</li>
+    <li class="indent">The screen now has a static layout, providing empty space where necessary to best center and fit
+      the game-screen</li>
+    <li>Fixed a bug with the color-wheel implementation that made a click outside of it on one of its sliders to cause
+      the selector in the color wheel to jump to the edge of the wheel closest to what was clicked on</li>
+    <li>Implemented (semi)-static color-wheel and brightness-slider cursor positions when in width-prominent aspect
+      ratio, as they used to keep their top and left attributes static which would make them appear to fly away when
+      changing window size in that case</li>
+    <li>Made the text and border on the testPatch change to dark gray when on a color with luminance higher than 50, and
+      light gray when lower than 50</li>
+    <li class="indent">Also implemented into historyPatch once created</li>
+    <li>Added loading graphic to clue box before the clue loads in</li>
+    <li>Optimized clue printing to not cut words in half (though idk why it wasn't just doing that in the first place, I
+      DELETED CODE)</li>
+    <li>Modified external color-picker code to make test patch color 100% opacity</li>
+    <li>Implemented a new menu layout specifically for round 1, with the guessButton in a more prominent position</li>
+    <li class="indent">Transitions to the default game layout, allowing space for the distance and highOrLow blocks,
+      once incremented past round 1</li>
+    <li class="indent">Automatically resets to round 1 layout once game ends</li>
+    <li>Optimized dynamics of mainMenu</li>
+    <li class="indent">Added media query to ensure nothing (untasefully) overlaps before the designated breaking point
+      (height less than 400px)</li>
+    <li class="indent">Made the CMBYS logo able to dark/light on either of its components, based on a randomizer; the
+      text below automatically turns light/dark to contrast the "SHADE" piece due to them needing to overlap at certain
+      window aspect ratios</li>
+    <li>Meticulously touched up automatic site color pallette algorithm</li>
+    <li>Added back and forward functionality (via a custom ES6 class, colorGuess) to historyPatch to view all past
+      guesses for a given round</li>
+    <li class="indent">The highOrLow panel now also indicates the "high or low" comparisons (as well as RGB/HSL values)
+      of present OR PAST guess, whatever is currently displayed on the historyPanel</li>
+    <li>Finally fixed the last bit of bugginess with the color wheel cursor (I think)</li>
+    <li>Conquered the beast!!! (FINALLY figured out how to utilize the colorPicker code to alter RGB/HSL values
+      incrementally with buttons on the game screen)</li>
+    <li>Implemented tutorial "slideshow" (Help button)</li>
+    <li>Swapped APIs, as I realized the one I've been using is not reliable for it's purpose</li>
+    <li class="indent"><a href="https://www.colourlovers.com/api" target="_blank">ColourLovers API</a> ---> <a
+        href="https://github.com/meodai/color-names" target="_blank">Color-Names API</a> by <a
+        href="https://xn--w-25a.elastiq.ch/" target="_blank">David Aerne</a></li>
+    <li class="indent">So many more actually color-derivative phrases, and actually allows for randomized output (unlike
+      the other)</li>
+    <li class="indent">It's probably not the best to swap something like that out last minute, but it's pretty much the
+      core piece of the game so this kind of brings the whole quality of the project a step up</li>
+    <li class="indent">API data still fetched with jQuery in the exact same method, doing the exact same things as
+      before</li>
+    <li>Added game clues to local storage and Game History panel</li>
+    <br>
+    <li>[Will update for IGME-330 changes later]</li>
+  </ul>
+  <footer></footer>
+</body>
+
 </html>

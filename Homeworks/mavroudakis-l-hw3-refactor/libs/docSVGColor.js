@@ -299,6 +299,8 @@ function hexToRgb(hex) {
 
 $(document).ready(() => {
 
+  let ix = Math.ceil(Math.random() * 2);
+
   let i = Math.random() * 2;
   
   var c = $('body').css('backgroundColor');
@@ -324,7 +326,8 @@ $(document).ready(() => {
   let solver = new Solver(color);
   let result = solver.solve();
 
-  c = $('#logo1').attr('style', result.filter);
+  if(ix == 1) c = $('#logo-1').attr('style', result.filter);
+  else c = $('#logo-2').attr('style', result.filter);
 
   c = $('body').css('backgroundColor');
   rgb = c.replace(/^rgba?\(|\s+|\)$/g,'').split(',');
@@ -349,5 +352,6 @@ $(document).ready(() => {
   solver = new Solver(color);
   result = solver.solve();
 
-  $('#logo2').attr('style', result.filter);
+  if(ix == 1) $('#logo-2').attr('style', result.filter);
+  else $('#logo-1').attr('style', result.filter);
 });

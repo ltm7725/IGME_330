@@ -1,66 +1,16 @@
 import Color from "https://colorjs.io/dist/color.js";
 import { changeSVG } from "../libs/svgColor.js";
 
-//Define variables
-let apiData;
-let colorDiscRadius;
-let theColor = [255, 255, 255, 0, 100, 100];
-let answerColor;
-let colorDistance;
-let round = 1;
-let matchEndOrientation = 0;
-let firstRoundOrientation = 0;
-let fixOtherRatio = false;
-document.querySelector("#start").onclick = startGame;
-document.querySelector("#help").onclick = tutorialStart;
-document.querySelector("#guess-button").onclick = incrementRound;
-let black = new Color("rgb(0,0,0)");
-let white = new Color("rgb(128,128,128)");
-document.querySelector("#back-to-menu").onclick = backToMenu;
-document.querySelector("body").onmousemove = setBoxes;
-document.querySelector("body").onmousedown = setBoxes;
-document.querySelector("body").onclick = setBoxes;
-document.querySelector("#change-color").onclick = setSiteColor;
-let mainLoop = setInterval(() => foreverLoop(), 1);
-let loop;
-let baseWidth = document.innerWidth;
-let baseHeight = document.innerHeight;
-let colorGuesses = new Array(10);
-let viewRound = 1;
-let pop = new Audio("media/Pop.mp3");
-let whip = new Audio("media/Whip.mp3");
-let h = 0;
-let s = 0;
-let l = 0;
-let search;
-let colorPicker;
-let cpDiv;
-let cpRadius;
-let cpBorder;
-let sldHeight;
-let sldMargin;
-let sPlaceholder;
-let sldHandle;
-let historyRound;
-
-reloadHistory();
-
-setSiteColor();
-
-let i = 1;
-
-reloadHistoryColors();
-
-gameLoop();
-
-function resetCPPrefab(hsl = false) {
+const resetCPPrefab = (hsl = false) => {
 
     let color;
     if (hsl) color = "hsl(" + theColor[3] + "," + theColor[4] + "," + theColor[5] + ")";
     else color = "rgb(" + theColor[0] + "," + theColor[1] + "," + theColor[2] + ")";
 
+    document.querySelector("#picker").innerHTML = "";
     colorPicker = null;
-    document.querySelector("#color-picker").innerHTML = "<div id=\"picker\"></div>";
+    cpRadius = document.querySelector("#cp").clientWidth / 2;
+    //document.querySelector("#color-picker").innerHTML = "<div id=\"picker\"></div>";
 
     colorPicker = new window.iro.ColorPicker("#picker", {
         handleRadius: 8,
@@ -159,10 +109,10 @@ function resetCPPrefab(hsl = false) {
     colorUpdate();
 }
 
-function colorUpdate(color) {
+const colorUpdate = (color) => {
     theColor = [colorPicker.color.rgb['r'], colorPicker.color.rgb['g'], colorPicker.color.rgb['b'], colorPicker.color.hsl['h'], colorPicker.color.hsl['s'], colorPicker.color.hsl['l']];
-    document.querySelector("#testPatch").style.backgroundColor = colorPicker.color.rgbString;
-    document.querySelector("#testPatch").innerHTML = colorPicker.color.hexString.toUpperCase();
+    document.querySelector("#test-patch").innerHTML = colorPicker.color.hexString.toUpperCase();
+    document.querySelector("#test-patch").style.backgroundColor = colorPicker.color.rgbString;
     let text;
     let label = ["r", "g", "b", "h", "s", "l"];
     for (let i = 0; i < 6; i++) {
@@ -190,10 +140,23 @@ function colorUpdate(color) {
         }
         document.querySelector("#" + label[i].toLowerCase() + "-text").innerHTML = text;
     };
+    document.querySelector(".IroColorPicker").style.width = (document.querySelector("#left-col").clientWidth / 3) * 2;
+    document.querySelector("#picker").style.width = (document.querySelector("#cp").clientWidth / 3) * 2;
+    document.querySelector("#color-picker").style.width = (document.querySelector("#cp").clientWidth / 3) * 2;
 }
 
 // Runs when the START button is pressed on the main page; gets data from the API, and switches to Game screen
-function startGame() {
+const startGame = () => {
+
+    gameIsLooping = true;
+
+    sldHeight = 45;
+    sldMargin = 5;
+    cpBorder = 3;
+    sldHandle = 11;
+
+
+    document.querySelector("#game").style.display = "block";
 
     document.querySelector("#back-guess").addEventListener("click", () => setGuess(viewRound - 1));
     document.querySelector("#forward-guess").addEventListener("click", () => setGuess(viewRound + 1));
@@ -259,19 +222,19 @@ function startGame() {
             // Consider making saturation function
             theColor[4]++;
             resetCPPrefab(true);
-            console.log(colorPicker.color.hsl['s']);
-            console.log(colorPicker.color.rgb);
-            console.log(colorPicker.color.hsl);
-            console.log(theColor);
+            // console.log(colorPicker.color.hsl['s']);
+            // console.log(colorPicker.color.rgb);
+            // console.log(colorPicker.color.hsl);
+            // console.log(theColor);
             colorUpdate();
         }
         else {
             theColor[4] = 1;
             resetCPPrefab(true);
-            console.log(colorPicker.color.hsl['s']);
-            console.log(colorPicker.color.rgb);
-            console.log(colorPicker.color.hsl);
-            console.log(theColor);
+            // console.log(colorPicker.color.hsl['s']);
+            // console.log(colorPicker.color.rgb);
+            // console.log(colorPicker.color.hsl);
+            // console.log(theColor);
             colorUpdate();
         }
     }
@@ -282,10 +245,10 @@ function startGame() {
             theColor[4]--;
             resetCPPrefab(true);
 
-            console.log(colorPicker.color.hsl['s']);
-            console.log(colorPicker.color.rgb);
-            console.log(colorPicker.color.hsl);
-            console.log(theColor);
+            // console.log(colorPicker.color.hsl['s']);
+            // console.log(colorPicker.color.rgb);
+            // console.log(colorPicker.color.hsl);
+            // console.log(theColor);
             colorUpdate();
         }
     }
@@ -304,7 +267,7 @@ function startGame() {
         }
     }
 
-    document.querySelector("#loading").style.display = "block";
+    if (document.querySelector("#loading-gif")) document.querySelector("#loading-gif").style.display = "block";
     whip.play();
     let r = Math.random() * 255;
     let g = Math.random() * 255;
@@ -316,7 +279,7 @@ function startGame() {
         // console.log(data);
         apiData = data;
         let test = vetClue(apiData)
-        console.log(test);
+        //console.log(test);
         if (test == -1) {
             console.log("looking for another color...");
             startGame();
@@ -324,7 +287,7 @@ function startGame() {
         }
         else {
             pop.play();
-            document.querySelector("#loading").style.display = "none";
+            document.querySelector("#loading-gif").style.display = "none";
             loadData();
         }
     });
@@ -332,19 +295,28 @@ function startGame() {
     document.querySelector("#main-menu").style.display = "none";
     document.querySelector("#past-games").style.display = "none";
     document.querySelector("#main-footer").style.display = "none";
-    document.querySelector("#game").style.display = "flex";
-    document.querySelector("#game").style.position = "absolute";
-    document.querySelector("#game").style.top = (window.innerHeight / 2) - (document.querySelector("#game").clientHeight / 2) + "px";
-    document.querySelector("#hsv-map .hsv-cursor").style.top = "50%";
-    document.querySelector("#hsv-map .hsv-cursor").style.left = "50%";
-    document.querySelector("#testPatch").style.backgroundColor = "rgb(" + theColor[0] + ", " + theColor[1] + ", " + theColor[2] + ")";
-    document.querySelector("#testPatch").innerHTML = "#FFFFFF";
+
+    //document.querySelector("#game").style.position = "absolute";
+    // document.querySelector("#game").style.top = (window.innerHeight / 2) - (document.querySelector("#game").clientHeight / 2) + "px";
+    document.querySelector("#test-patch").style.backgroundColor = "rgb(" + theColor[0] + ", " + theColor[1] + ", " + theColor[2] + ")";
+    document.querySelector("#test-patch").innerHTML = "#FFFFFF";
+
+    resetCPPrefab();
 
     loop = setInterval(() => gameLoop(), 1);
+
+    setTimeout(() => {
+        if (document.querySelector("#game-div").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight) {
+            document.querySelector("#game-div").style.marginTop = "calc(" + (((window.innerHeight - document.querySelector("nav").clientHeight) / 2) - (document.querySelector("#game").clientHeight / 2)) + "px + " + gap + "rem)";
+        }
+        else document.querySelector("#game-div").style.marginTop = 0;
+    }, 1);
+
+    document.querySelector(".IroWheel").click();
 }
 
 //Checks if clue used before, if so skips it
-function vetClue(apiData) {
+const vetClue = (apiData) => {
     let good = 1;
 
     if (localStorage.getItem('k1') != null) {
@@ -359,16 +331,16 @@ function vetClue(apiData) {
 }
 
 //Walkthrough of the game's functions in slideshow form
-function tutorialStart() {
+const tutorialStart = () => {
     pop.play();
-    document.querySelector("#main-menu").style.display = "none";
+    //document.querySelector("#main-menu").style.display = "none";
     document.querySelector("#past-games").style.display = "none";
     document.querySelector("#main-footer").style.display = "none";
-    document.querySelector("#game").style.display = "flex";
-    document.querySelector("#game").style.position = "absolute";
-    document.querySelector("#testPatch").style.backgroundColor = "rgb(" + color.rgb['r'] + ", " + color.rgb['g'] + ", " + color.rgb['b'] + ")";
-    document.querySelector("#testPatch").innerHTML = "#FFFFFF";
-    document.querySelector("#the-word").innerHTML = "Your clue is...<br>" + "\"_______\"";
+    document.querySelector("#game").style.display = "block";
+    //document.querySelector("#game").style.position = "absolute";
+    document.querySelector("#test-patch").style.backgroundColor = "rgb(" + color.rgb['r'] + ", " + color.rgb['g'] + ", " + color.rgb['b'] + ")";
+    document.querySelector("#test-patch").innerHTML = "#FFFFFF";
+    document.querySelector("#the-word").innerHTML = "<img id=\"loading-gif\" src=\"media/Loading.gif\" alt=\"rainbow loading graphic\"> <p id=\"the-clue\" class=\"is-size-2\">Your clue is...<br>\"_______\"</p>";
     document.querySelector("#tut-button-1").innerHTML = "Let's do it!";
     loop = setInterval(() => gameLoop(), 1);
     document.querySelector("#tutorial-screen").style.backgroundImage = "url(media/tut1.png)";
@@ -379,7 +351,7 @@ function tutorialStart() {
 }
 
 //Actions required to progress through tutorial slideshow
-function tutorialPage2() {
+const tutorialPage2 = () => {
     pop.play();
     document.querySelector("#tut-button-2").innerHTML = "Show me the ropes!";
     document.querySelector("#tut-button-1").style.display = "none";
@@ -388,13 +360,13 @@ function tutorialPage2() {
     document.querySelector("#tut-button-2").onclick = tutorialPage3;
 }
 
-function tutorialPage3() {
+const tutorialPage3 = () => {
     pop.play();
     document.querySelector("#tut-button-2").innerHTML = "Ok, so how do I play?";
     document.querySelector("#tutorial-screen").style.backgroundImage = "url(media/tut3.png)";
     document.querySelector("#tut-button-2").onclick = tutorialPage4;
 }
-function tutorialPage4() {
+const tutorialPage4 = () => {
     pop.play();
     document.querySelector("#tut-button-1").innerHTML = "Next --->";
     document.querySelector("#hsv-map .cover").style.zIndex = "101";
@@ -405,13 +377,13 @@ function tutorialPage4() {
     document.querySelector("#tut-button-1").onclick = tutorialPage5;
 }
 
-function tutorialPage5() {
+const tutorialPage5 = () => {
     pop.play();
     document.querySelector("#tutorial-screen").style.backgroundImage = "url(media/tut5.png)";
     document.querySelector("#tut-button-1").onclick = tutorialPage6;
 }
 
-function tutorialPage6() {
+const tutorialPage6 = () => {
     pop.play();
     document.querySelector("#tut-button-1").style.fontStyle = "italic";
     document.querySelector("#tut-button-1").innerHTML = "Take A Guess";
@@ -419,17 +391,17 @@ function tutorialPage6() {
     document.querySelector("#tut-button-1").onclick = tutorialPage7;
 }
 
-function tutorialPage7() {
+const tutorialPage7 = () => {
     pop.play();
     document.querySelector("#history-patch").style.display = "block";
     answerColor = new Color("a98rgb-linear", [document.querySelector("#color-values").innerHTML.substring(document.querySelector("#color-values").innerHTML.indexOf("(") + 1, document.querySelector("#color-values").innerHTML.indexOf(",")) / 255, document.querySelector("#color-values").innerHTML.substring(document.querySelector("#color-values").innerHTML.indexOf(",") + 1, findNth(document.querySelector("#color-values").innerHTML, ",", 2)) / 255, document.querySelector("#color-values").innerHTML.substring(findNth(document.querySelector("#color-values").innerHTML, ",", 2) + 1, findNth(document.querySelector("#color-values").innerHTML, ",", 3)) / 255]);
     theColor = [color.rgb['r'], color.rgb['g'], color.rgb['b'], color.hsl['h'], color.hsl['s'], color.hsl['l']];
     let outArray = highOrLow(answerColor);
-    let c = new ColorGuess(parseInt(document.querySelector("#tR").innerHTML), parseInt(document.querySelector("#tG").innerHTML), parseInt(document.querySelector("#tB").innerHTML), parseInt(document.querySelector("#tH").innerHTML), parseInt(document.querySelector("#tS").innerHTML), parseInt(document.querySelector("#tL").innerHTML), document.querySelector("#testPatch").innerHTML.substring(1), outArray[0], outArray[1], outArray[2], outArray[3], outArray[4], outArray[5]);
-    console.log(c);
+    let c = new ColorGuess(parseInt(document.querySelector("#tR").innerHTML), parseInt(document.querySelector("#tG").innerHTML), parseInt(document.querySelector("#tB").innerHTML), parseInt(document.querySelector("#tH").innerHTML), parseInt(document.querySelector("#tS").innerHTML), parseInt(document.querySelector("#tL").innerHTML), document.querySelector("#test-patch").innerHTML.substring(1), outArray[0], outArray[1], outArray[2], outArray[3], outArray[4], outArray[5]);
+    //console.log(c);
     colorGuesses[round - 1] = c;
     if (round == 1) firstGuessTransition();
-    document.querySelector("#history-patch").innerHTML = round + "/10";
+    document.querySelector("#history-patch p").innerHTML = round + "/10";
     round++;
     viewRound = round;
     setGuess(viewRound - 1);
@@ -444,13 +416,13 @@ function tutorialPage7() {
     document.querySelector("#tut-button-3").onclick = tutorialPage8;
 }
 
-function tutorialPage8() {
+const tutorialPage8 = () => {
     pop.play();
     document.querySelector("#tutorial-screen").style.backgroundImage = "url(media/tut8.png)";
     document.querySelector("#tut-button-3").onclick = tutorialPage9;
 }
 
-function tutorialPage9() {
+const tutorialPage9 = () => {
     pop.play();
     document.querySelector("#tutorial-screen").style.backgroundImage = "url(media/tut9.png)";
     document.querySelector("#tut-button-3").style.display = "none";
@@ -468,7 +440,7 @@ function tutorialPage9() {
         document.querySelector("#back-guess").style.display = "none";
         document.querySelector("#forward-guess").style.display = "none";
         document.querySelector("#distance").innerHTML = "";
-        document.querySelector("#the-word").innerHTML = "Your clue is...<br><br>"
+        document.querySelector("#the-word").innerHTML = "<img id=\"loading-gif\" src=\"media/Loading.gif\" alt=\"rainbow loading graphic\"> <p id=\"the-clue\" class=\"is-size-2\">Your clue is...<br>\"_______\"</p>";
         document.querySelector("#hol").innerHTML = "";
         document.querySelector("#tut-button-4").style.display = "none";
         document.querySelector("#tut-button-5").style.display = "none";
@@ -485,7 +457,8 @@ function tutorialPage9() {
         document.querySelector("#back-guess").style.display = "none";
         document.querySelector("#forward-guess").style.display = "none";
         document.querySelector("#distance").innerHTML = "";
-        document.querySelector("#the-word").innerHTML = "Your clue is...<br><br>"
+        document.querySelector("#the-word").innerHTML = "<img id=\"loading-gif\" src=\"media/Loading.gif\" alt=\"rainbow loading graphic\"> <p id=\"the-clue\" class=\"is-size-2\">Your clue is...<br>\"_______\"</p>";
+
         document.querySelector("#hol").innerHTML = "";
         document.querySelector("#tut-button-4").style.display = "none";
         document.querySelector("#tut-button-5").style.display = "none";
@@ -496,16 +469,29 @@ function tutorialPage9() {
 }
 
 // Runs after API data is fetched; Loads information from API into game system and screen
-function loadData() {
+const loadData = () => {
     let title = apiData.colors[0].name;
-    console.log(apiData.colors[0].rgb['r'], apiData.colors[0].rgb['g'], apiData.colors[0].rgb['b']);
-    document.querySelector("#the-word").innerHTML = "Your clue is...<br>\"" + title + "\"";
+    //console.log(apiData.colors[0].rgb['r'], apiData.colors[0].rgb['g'], apiData.colors[0].rgb['b']);
+    document.querySelector("#the-word").innerHTML = "<img id=\"loading-gif\" src=\"media/Loading.gif\" alt=\"rainbow loading graphic\"> <p id=\"the-clue\" class=\"is-size-2\">Your clue is...<br>\"" + title + "\"</p>";
+    //console.log(document.querySelector("#the-word").innerHTML);
     theColor = [255, 255, 255, 0, 100, 100];
     setBoxes();
 }
 
 //Loop that checks anything that needs to change on a dime
-function foreverLoop() {
+const foreverLoop = () => {
+
+    if (!gameIsLooping) {
+        document.querySelector("body").style.height = document.querySelector("#parent-div").clientHeight + "px";
+    }
+
+    if (document.querySelector("#end-game").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight) document.querySelector("#end-game").style.marginTop = "calc(" + ((window.innerHeight / 2 + (document.querySelector("nav").clientHeight / 2)) - (document.querySelector("#end-game").clientHeight / 2)) + "px - 7rem)";
+    else document.querySelector("#end-game").style.marginTop = "0px"
+
+    //console.log(document.querySelector("#end-game").clientHeight < document.querySelector("body").clientHeight);
+
+    document.querySelector("#cmby").style.marginBottom = "-" + document.querySelector("#cmby").clientHeight + "px";
+    document.querySelector("#s").style.display = "block";
 
     //console.log(colorPicker.color.hsl['l']);
 
@@ -515,432 +501,42 @@ function foreverLoop() {
     //Forgive me... you can't do multiple layouts in a transition like this thru raw css afaik
     if (round > 1) {
         // Set all css positioning for layout unique to certain rounds (round 1 vs not round 1)
-        if (!x.matches) {
-            document.querySelector("#testPatch").style.top = "19vw";
-            document.querySelector("#testPatch").style.left = "52vw";
-            document.querySelector("#history-patch").style.top = "37vw";
-            document.querySelector("#history-patch").style.left = "76vw";
-            //document.querySelector("#sliders").style.top = "48vw";
-            //document.querySelector("#sliders").style.left = "-2.5vw";
-            document.querySelector("#hsv-map").style.top = "0vw";
-            document.querySelector("#hsv-map").style.left = "0vw";
-            document.querySelector("#the-word").style.top = "12.4vw";
-            document.querySelector("#the-word").style.left = "59vw";
-            document.querySelector("#guess-button").style.top = "3.75vw";
-            document.querySelector("#guess-button").style.left = "14vw";
-            document.querySelector("#tut-button-3").style.top = "5vw";
-            document.querySelector("#tut-button-3").style.left = "14vw";
-            document.querySelector("#tut-button-1").style.top = "5vw";
-            document.querySelector("#tut-button-1").style.left = "14vw";
-            document.querySelector("#tut-button-4").style.top = "55vw";
-            document.querySelector("#tut-button-4").style.left = "14vw";
-            document.querySelector("#tut-button-5").style.top = "52vw";
-            document.querySelector("#tut-button-5").style.left = "50vw";
-            document.querySelector("#guess-number").style.top = "4vw";
-            document.querySelector("#guess-number").style.left = "66.1vw";
-            //document.querySelector("#inputs").style.top = "31.45vw";
-            //document.querySelector("#inputs").style.left = ".3vw";
-            document.querySelector("#sliders-back").style.top = "47.1vw";
-            document.querySelector("#sliders-back").style.left = "42vw";
-            document.querySelector("#sliders-back").style.width = "13.75vw";
-            document.querySelector("#num-back").style.top = "3.5vw";
-            document.querySelector("#num-back").style.left = "66vw";
-            //document.querySelector("#hideCursorGlitchDiv").style.top = "15vw";
-            //document.querySelector("#hideCursorGlitchDiv").style.left = "4.5vw";
-            document.querySelector("#arrows").style.top = "25.25vw";
-            document.querySelector("#arrows").style.left = "42vw";
-            for (let a of document.querySelectorAll(".up")) {
-                a.style.marginLeft = ".9vw"
-            }
-            for (let a of document.querySelectorAll(".down")) {
-                a.style.marginLeft = ".9vw"
-            }
-            for (let a of document.querySelectorAll(".arr-label")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "-6vw";
-                    a.style.top = "-0.45vw";
-                    a.style.marginTop = "-0.1vw";
-                    a.style.bottom = "-1.9vw";
-                    a.style.marginBottom = "-3.75vw";
-                    a.style.marginRight = "-10vw";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    if (matchEndOrientation == 4) {
-                        a.style.margin = "0";
-                        a.style.marginRight = "-20vw";
-                        a.style.top = "0.75vw";
-                        a.style.left = "-6vw";
-                        a.style.marginBottom = "-5.633vw";
-                    }
-                }
-            }
-            for (let a of document.querySelectorAll(".arr-text")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "-4.5vw";
-                    a.style.top = "-0.1vw";
-                    a.style.marginBottom = "-3vw";
-                    a.style.marginLeft = "0";
-                }
-                else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                    a.style.marginBottom = "-1vw";
-                    a.style.left = "1vw";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    fixOtherRatio = true;
-                    if (matchEndOrientation == 4) {
-                        a.style.margin = "0";
-                        a.style.top = "2.85vw";
-                        a.style.left = "-3.625vw";
-                        a.style.marginBottom = "0.075vw";
-                    }
-                }
-            }
-            if (matchEndOrientation == 0) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "5.1vw";
-                document.querySelector("#color-picker").style.marginTop = "-3vw";
-            }
-            else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "5.33vw";
-                if(matchEndOrientation == 4) {
-                    document.querySelectorAll(".arr-label")[0].style.marginTop = "4vw";
-                }
-            }
-        }
-        else if (x.matches) {
-            // if (y.matches) {
-            //     document.querySelector("#sliders-back").style.width = (document.body.clientHeight * 1.387 * .1375) + (document.body.clientHeight * 1.387 * .0275) * (.01 * -(document.body.clientHeight - 500)) + "px";
-            //     //document.querySelector("#inputs").style.left = (document.body.clientHeight * 1.387 * .015) + (document.body.clientHeight * 1.387 * .01) * (.01 * -(document.body.clientHeight - 500)) + "px";
-            //     //document.querySelector("#sliders").style.left = "calc(138.7vh * -.02)";
-            //     document.querySelector("#sliders-back").style.left = "calc(138.7vh * .396)";
-            //     document.querySelector("#arrows").style.left = (document.body.clientHeight * 1.387 * .43) + (document.body.clientHeight * 1.387 * .02) * (.01 * -(document.body.clientHeight - 500)) + "px";
-            //     document.querySelector("#arrows").style.top = "calc(138.7vh * .34)";
-            // }
-
-            document.querySelector("#sliders-back").style.width = "calc(138.7vh * .1375)";
-            //document.querySelector("#inputs").style.left = "calc(138.7vh * .0275)";
-            //document.querySelector("#sliders").style.left = "calc(138.7vh * -.003)";
-            document.querySelector("#sliders-back").style.left = "calc(138.7vh * .42)";
-            document.querySelector("#arrows").style.left = "calc(138.7vh * .44)";
-            document.querySelector("#arrows").style.top = "calc(138.7vh * .338)";
-
-            document.querySelector("#testPatch").style.top = "calc(138.7vh * .19)";
-            document.querySelector("#testPatch").style.left = "calc(138.7vh * .54)";
-            document.querySelector("#history-patch").style.top = "calc(138.7vh * .37)";
-            document.querySelector("#history-patch").style.left = "calc(138.7vh * .76)";
-            //document.querySelector("#sliders").style.top = "calc(138.7vh * .48)";
-            document.querySelector("#hsv-map").style.top = "0";
-            document.querySelector("#hsv-map").style.left = "calc(138.7vh * .019)";
-            document.querySelector("#the-word").style.top = "calc(138.7vh * .124)";
-            document.querySelector("#the-word").style.left = "calc(138.7vh * .59)";
-            document.querySelector("#guess-button").style.top = "calc(138.7vh * .0375)";
-            document.querySelector("#guess-button").style.left = "calc(138.7vh * .14)";
-            document.querySelector("#tut-button-3").style.top = "calc(138.7vh * .05)";
-            document.querySelector("#tut-button-3").style.left = "calc(138.7vh * .14)";
-            document.querySelector("#tut-button-4").style.top = "calc(138.7vh * .55)";
-            document.querySelector("#tut-button-4").style.left = "calc(138.7vh * .14)";
-            document.querySelector("#tut-button-5").style.top = "calc(138.7vh * .52)";
-            document.querySelector("#tut-button-5").style.left = "calc(138.7vh * .5)";
-            document.querySelector("#guess-number").style.top = "calc(138.7vh * .04)";
-            document.querySelector("#guess-number").style.left = "calc(138.7vh * .661)";
-            //document.querySelector("#inputs").style.top = "calc(138.7vh * .313)";
-            document.querySelector("#sliders-back").style.top = "calc(138.7vh * .471)";
-            document.querySelector("#num-back").style.top = "calc(138.7vh * .035)";
-            document.querySelector("#num-back").style.left = "calc(138.7vh * .66)";
-            //document.querySelector("#hideCursorGlitchDiv").style.top = "calc(138.7vh * .15)";
-            //document.querySelector("#hideCursorGlitchDiv").style.left = "calc(138.7vh * .045)";
-            for (let a of document.querySelectorAll(".arr-label")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "calc(138.7vh * -.06)";
-                    a.style.top = "calc(138.7vh * -0.006)";
-                    a.style.marginTop = "calc(138.7vh * .0)";
-                    a.style.bottom = "calc(138.7vh * -.019)";
-                    a.style.marginBottom = "calc(138.7vh * -.036)";
-                    a.style.marginRight = "calc(138.7vh * -.1)";
-                }
-                if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    if (matchEndOrientation == 4) {
-                        a.style.left = "calc(138.7vh * -.06)";
-                        a.style.top = "calc(138.7vh * 0.01675)";
-                        a.style.marginBottom = "calc(138.7vh * -0.045625)";
-                    }
-                }
-            }
-            for (let a of document.querySelectorAll(".arr-text")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "calc(138.7vh * -.0375)";
-                    a.style.top = "calc(138.7vh * -.005)";
-                    a.style.marginBottom = "calc(138.7vh * -.0315)";
-                    a.style.marginLeft = "calc(138.7vh * -.01)";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    if (matchEndOrientation == 4) {
-                        a.style.left = "calc(138.7vh * -.0375)";
-                        a.style.top = "calc(138.7vh * .02833)";
-                        a.style.marginBottom = "calc(138.7vh * -0.000533)";
-                        if(fixOtherRatio) {
-                            a.style.marginBottom = "calc(138.7vh * -0.01)";
-                        }
-                    }
-                }
-            }
-            if (matchEndOrientation == 0) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "calc(138.7vh * -.035)";
-                for (let a of document.querySelectorAll(".up")) {
-                    a.style.marginLeft = "calc(138.7vh * .009)"
-                }
-                for (let a of document.querySelectorAll(".down")) {
-                    a.style.marginLeft = "calc(138.7vh * .009)"
-                }
-                document.querySelector("#color-picker").style.marginTop = "calc(138.7vh * -.03)";
-            }
-            else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                if (matchEndOrientation == 4) {
-                    document.querySelectorAll(".arr-label")[0].style.marginTop = "calc(138.7vh * -.0565)";
-                    for (let a of document.querySelectorAll(".up")) {
-                        a.style.marginLeft = "calc(138.7vh * .01)"
-                    }
-                    for (let a of document.querySelectorAll(".down")) {
-                        a.style.marginLeft = "calc(138.7vh * .01)"
-                    }
-                }
-            }
-        }
-    }
-    else {
-        if (!x.matches) {
-            document.querySelector("#testPatch").style.top = "21vw";
-            document.querySelector("#testPatch").style.left = "60.5vw";
-            //document.querySelector("#sliders").style.top = "41vw";
-            //document.querySelector("#sliders").style.left = "-1.5vw";
-            document.querySelector("#hsv-map").style.top = "-8vw";
-            document.querySelector("#hsv-map").style.left = "0vw";
-            document.querySelector("#the-word").style.top = "21vw";
-            document.querySelector("#the-word").style.left = "59vw";
-            document.querySelector("#guess-button").style.top = "47.5vw";
-            document.querySelector("#guess-button").style.left = "59.5vw";
-            document.querySelector("#tut-button-1").style.top = "47.5vw";
-            document.querySelector("#tut-button-1").style.left = "59.5vw";
-            document.querySelector("#tut-button-2").style.top = "47.5vw";
-            document.querySelector("#tut-button-2").style.left = "59.5vw";
-            document.querySelector("#guess-number").style.top = "13vw";
-            document.querySelector("#guess-number").style.left = "66.1vw";
-            //document.querySelector("#inputs").style.top = "24.5vw";
-            //document.querySelector("#inputs").style.left = "1.5vw";
-            document.querySelector("#sliders-back").style.top = "42vw";
-            document.querySelector("#sliders-back").style.left = "42vw";
-            document.querySelector("#num-back").style.top = "12.75vw";
-            document.querySelector("#num-back").style.left = "66vw";
-            //document.querySelector("#hideCursorGlitchDiv").style.top = "7.5vw";
-            //document.querySelector("#hideCursorGlitchDiv").style.left = "4.5vw";
-            document.querySelector("#arrows").style.top = "25.25vw";
-            document.querySelector("#arrows").style.left = "43vw";
-            document.querySelector("#sliders-back").style.width = "13.75vw";
-            for (let a of document.querySelectorAll(".arr-label")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "-7vw";
-                    a.style.top = "0";
-                    a.style.marginBottom = "-3.25vw";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    a.style.top = ".85vw";
-                    a.style.marginBottom = "-5.45vw";
-                    matchEndOrientation = 4;
-
-                    if (matchEndOrientation == 4) {
-                        a.style.left = "-6.975vw";
-                    }
-                }
-                else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                    a.style.margin = "0";
-                    a.style.marginRight = "-10vw"
-                    a.style.left = "-8vw";
-                    a.style.marginLeft = "1vw"
-                    a.style.marginBottom = "-5.55vw";
-                    a.style.top = ".85vw";
-                }
-            }
-            for (let a of document.querySelectorAll(".arr-text")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "-5vw";
-                    a.style.top = "-0.15vw";
-                    a.style.marginRight = "-2.75vw";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    a.style.marginBottom = "0";
-                    a.style.top = "2.85vw";
-                    if (matchEndOrientation == 4) {
-                        a.style.margin = "0";
-                        a.style.left = "-4.6vw";
-                        a.style.top = "2.9vw";
-                    }
-                }
-                else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                    a.style.margin = "0";
-                    a.style.marginRight = "-1vw";
-                    a.style.left = "-5vw";
-                    a.style.marginLeft = "0.4vw";
-                    a.style.top = "3vw"
-                    matchEndOrientation = 3;
-                }
-            }
-
-            if (matchEndOrientation == 0) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "-0.5vw";
-                document.querySelector("#color-picker").style.marginTop = "-8.125vw";
-            }
-            if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "-1.35vw"
-            }
-            else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "-1.34vw";
-            }
-
-            for (let a of document.querySelectorAll(".up")) {
-                a.style.marginLeft = "0";
-            }
-            for (let a of document.querySelectorAll(".down")) {
-                a.style.marginLeft = "0";
-            }
-        }
-        else if (x.matches) {
-            if (y.matches) {
-                document.querySelector("#sliders-back").style.width = (document.body.clientHeight * 1.387 * .1375) + (document.body.clientHeight * 1.387 * .0275) * (.01 * -(document.body.clientHeight - 490)) + "px";
-                //document.querySelector("#inputs").style.left = (document.body.clientHeight * 1.387 * .025) + (document.body.clientHeight * 1.387 * .01)*(.01 * -(document.body.clientHeight - 500)) + "px";
-                //document.querySelector("#sliders").style.left = "calc(138.7vh * -.01)";
-                document.querySelector("#sliders-back").style.left = "calc(138.7vh * .406)";
-                document.querySelector("#arrows").style.left = (document.body.clientHeight * 1.387 * .44) + (document.body.clientHeight * 1.387 * .02) * (.01 * -(document.body.clientHeight - 490)) + "px";
-                document.querySelector("#arrows").style.top = "calc(138.7vh * .2525)";
-            }
-            else {
-                document.querySelector("#sliders-back").style.left = "calc(138.7vh * .42)";
-                document.querySelector("#sliders-back").style.width = "calc(138.7vh * .1375)";
-                document.querySelector("#arrows").style.top = "calc(138.7vh * .2525)";
-                document.querySelector("#arrows").style.left = "calc(138.7vh * .45)";
-                //document.querySelector("#sliders").style.left = "calc(138.7vh * .004)";
-                //document.querySelector("#inputs").style.left = "calc(138.7vh * .037)";
-            }
-
-            document.querySelector("#testPatch").style.top = "calc(138.7vh * .21)";
-            document.querySelector("#testPatch").style.left = "calc(138.7vh * .624)";
-            //document.querySelector("#sliders").style.top = "calc(138.7vh * .41)";
-            document.querySelector("#hsv-map").style.top = "calc(138.7vh * -.08)";
-            document.querySelector("#hsv-map").style.left = "calc(138.7vh * .019)";
-            document.querySelector("#the-word").style.top = "calc(138.7vh * .21)";
-            document.querySelector("#the-word").style.left = "calc(138.7vh * .59)";
-            document.querySelector("#guess-button").style.top = "calc(138.7vh * .475)";
-            document.querySelector("#guess-button").style.left = "calc(138.7vh * .595)";
-            document.querySelector("#tut-button-1").style.top = "calc(138.7vh * .475)";
-            document.querySelector("#tut-button-1").style.left = "calc(138.7vh * .595)";
-            document.querySelector("#tut-button-2").style.top = "calc(138.7vh * .475)";
-            document.querySelector("#tut-button-2").style.left = "calc(138.7vh * .595)";
-            document.querySelector("#guess-number").style.top = "calc(138.7vh * .13)";
-            document.querySelector("#guess-number").style.left = "calc(138.7vh * .661)";
-            //document.querySelector("#inputs").style.top = "calc(138.7vh * .245)";
-            document.querySelector("#sliders-back").style.top = "calc(138.7vh * .42)";
-            document.querySelector("#num-back").style.top = "calc(138.7vh * .1275)";
-            document.querySelector("#num-back").style.left = "calc(138.7vh * .66)";
-            //document.querySelector("#hideCursorGlitchDiv").style.top = "calc(138.7vh * .075)";
-            //document.querySelector("#hideCursorGlitchDiv").style.left = "calc(138.7vh * .045)";
-            for (let a of document.querySelectorAll(".arr-label")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "calc(138.7vh * -.07)";
-                    a.style.top = "calc(138.7vh * 0)";
-                    a.style.marginBottom = "calc(138.7vh * -.0325)";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    a.style.marginBottom = "calc(138.7vh * -.024)";
-                    a.style.top = "calc(138.7vh * 0.0075)";
-                    if (matchEndOrientation == 4) {
-                        a.style.margin = "0";
-                        a.style.left = "calc(138.7vh * -0.07)";
-                        a.style.top = "calc(138.7vh * 0.0175)";
-                        a.style.marginRight = "calc(138.7vh * -0.2)";
-                        a.style.marginTop = "calc(138.7vh * -0.01)";
-                        a.style.marginBottom = "calc(138.7vh * -.0445)";
-                    }
-                }
-                else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                    a.style.margin = "0";
-                    a.style.marginLeft = "calc(138.7vh * -.01)"
-                    a.style.marginRight = "calc(138.7vh * -.1)";
-                    a.style.marginBottom = "calc(138.7vh * -.02385)";
-                    a.style.top = "calc(138.7vh * 0.0075)";
-                    if (matchEndOrientation == 3) {
-                        a.style.left = "calc(138.7vh * -0.05975)";
-                        a.style.marginBottom = "calc(138.7vh * -.05533)";
-                        a.style.top = "calc(138.7vh * 0.0085)";
-                    }
-                }
-            }
-            for (let a of document.querySelectorAll(".arr-text")) {
-                if (matchEndOrientation == 0) {
-                    a.style.left = "calc(138.7vh * -.0475)";
-                    a.style.top = "calc(138.7vh * -.0015)";
-                    a.style.marginRight = "calc(138.7vh * -.02)";
-                }
-                else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                    a.style.top = "calc(138.7vh * -.002)";
-                    a.style.left = "calc(138.7vh * -.0425)";
-                    if (matchEndOrientation == 4) {
-                        a.style.top = "calc(138.7vh * .0275)";
-                        a.style.left = "calc(138.7vh * -.0485)";
-                    }
-                }
-                else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                    a.style.top = "calc(138.7vh * -.002)";
-                    a.style.left = "calc(138.7vh * -.0425)";
-                    if (matchEndOrientation == 3) {
-                        a.style.top = "calc(138.7vh * .03)";
-                        a.style.left = "calc(138.7vh * -.05125)";
-                    }
-                }
-            }
-
-            if (matchEndOrientation == 0) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "calc(138.7vh * -.005)";
-                document.querySelector("#color-picker").style.marginTop = "calc(138.7vh * -.08)";
-            }
-            else if (matchEndOrientation == 1 || matchEndOrientation == 4) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "calc(138.7vh * -.024)";
-                for (let a of document.querySelectorAll(".down")) {
-                    a.style.marginLeft = "0";
-                }
-                for (let a of document.querySelectorAll(".up")) {
-                    a.style.marginLeft = "0";
-                }
-            }
-            else if (matchEndOrientation == 2 || matchEndOrientation == 3) {
-                document.querySelectorAll(".arr-label")[0].style.marginTop = "calc(138.7vh * -.013)";
-                for (let a of document.querySelectorAll(".down")) {
-                    a.style.marginLeft = "0";
-                }
-                for (let a of document.querySelectorAll(".up")) {
-                    a.style.marginLeft = "0";
-                }
-                if (matchEndOrientation == 3) {
-                    document.querySelectorAll(".arr-label")[0].style.marginTop = "calc(138.7vh * -.014)";
-                }
-            }
-        }
-    }
-
-    document.querySelector("#tut-button-1").style.lineHeight = document.querySelector("#tut-button-1").clientHeight + "px";
-    document.querySelector("#tut-button-3").style.lineHeight = document.querySelector("#tut-button-3").clientHeight + "px";
-    document.querySelector("#tut-button-4").style.lineHeight = document.querySelector("#tut-button-4").clientHeight + "px";
-
-    //document.querySelector("#testPatch").style.backgroundColor = "rgb(" + document.querySelector("#tR").innerHTML + "," + document.querySelector("#tG").innerHTML + "," + document.querySelector("#tB").innerHTML + ")";;
-    document.querySelector("#guess-button").style.lineHeight = document.querySelector("#guess-button").clientHeight + "px";
-
-    if (window.matchMedia("(min-aspect-ratio: 946/540)").matches && round > 1) {
-        document.querySelector("#tut-button-3").style.top = (window.innerHeight * 0.2 / 1.9) - (document.querySelector("#tut-button-3").clientHeight / 2) + "px";
-        document.querySelector("#guess-button").style.top = (window.innerHeight * 0.2 / 1.9) - (document.querySelector("#guess-button").clientHeight / 2) + "px";
     }
 }
 
 // Runs frequently; checks several things regarding screen layout that can't be updated through css
-function gameLoop() {
+const gameLoop = () => {
+
+    document.querySelector("body").style.height = "calc(" + (document.querySelector("#game").clientHeight + document.querySelector("#end-game").clientHeight) + "px + 10.75rem)";
 
     let x = window.matchMedia("(min-aspect-ratio: 1000/721)");
+    let iroHeight = document.querySelector("div .IroWheelBorder").clientHeight;
+    for (let a of document.querySelectorAll(".IroSlider")) iroHeight += a.clientHeight;
+
+    if ((round == 1 && document.querySelector("#game-div").clientHeight > 1000) || (round > 1 && document.querySelector("#game-div").clientHeight > 1000)) {
+        document.querySelector("#picker").style.top = "0px";
+        document.querySelector("#values-box").style.right = ((document.querySelector("#game-div").clientWidth) / 4) - ((document.querySelector("#values-box").clientWidth) / 2) + "px";
+        document.querySelector("#values-box").style.top = "calc(" + (document.querySelector("#left-col").clientHeight + ((iroHeight / 2) - (document.querySelector("#values-box").clientHeight / 2))) + "px + 3rem)";
+        document.querySelector("#guess-number").style.marginTop = 0;
+    }
+    else {
+        document.querySelector("#guess-number").style.marginTop = ((document.querySelector("#game-div").clientHeight / 2) - (document.querySelector(".holder").clientHeight / 2)) + "px";
+        document.querySelector("#picker").style.top = "calc(" + ((document.querySelector("#left-col").clientHeight / 2) - (iroHeight / 2)) + "px - 1rem)";
+        document.querySelector("#values-box").style.right = (((document.querySelector("#game-div").clientWidth - document.querySelector("#left-col").clientWidth) / 3.75) - (document.querySelector("#values-box").clientWidth / 2)) + "px";
+        document.querySelector("#values-box").style.top = ((document.querySelector("#game-div").clientHeight / 2) - (document.querySelector("#values-box").clientHeight / 2)) + "px";
+    }
+
+    if(window.innerWidth > 2850) {
+        document.querySelector("#guess-number").style.marginTop = ((document.querySelector("#game-div").clientHeight / 2) - (document.querySelector(".holder").clientHeight / 2)) + "px";
+        document.querySelector("#picker").style.top = "calc(" + ((document.querySelector("#left-col").clientHeight / 2) - (iroHeight / 2)) + "px - 1rem)";
+        document.querySelector("#values-box").style.right = (((document.querySelector("#game-div").clientWidth - document.querySelector("#left-col").clientWidth) / 3.75) - (document.querySelector("#values-box").clientWidth / 2)) + "px";
+        document.querySelector("#values-box").style.top = ((document.querySelector("#game-div").clientHeight / 2) - (document.querySelector("#values-box").clientHeight / 2)) + "px";
+    }
+
+    document.querySelector("#values-box").style.bottom = (iroHeight / 2) - (document.querySelector("#values-box").clientHeight / 2);
+
+    document.querySelector("#loading-gif").style.transform = "translate(" + ((document.querySelector("#the-clue").clientWidth / 2) - (document.querySelector("#loading-gif").clientWidth / 2)) + "px," + ((document.querySelector("#the-clue").clientHeight / 2) - (document.querySelector("#loading-gif").clientHeight / 2)) + "px)";
+
     // document.querySelector(".IroColorPicker:nth-child(2):after").style.content = "Test";
 
     if (l <= 50) {
@@ -958,59 +554,42 @@ function gameLoop() {
         for (let a of document.querySelectorAll(".arr-text")) a.style.color = "black";
     }
 
-    document.querySelector("#game").style.top = ((window.innerHeight - document.querySelector("#game").clientHeight) / 2) + "px";
-    document.querySelector("#tutorial-screen").style.top = ((window.innerHeight - document.querySelector("#game").clientHeight) / 2) + "px";
+    // document.querySelector("#game").style.top = ((window.innerHeight - document.querySelector("#game").clientHeight) / 2) + "px";
+    // document.querySelector("#tutorial-screen").style.top = ((window.innerHeight - document.querySelector("#game").clientHeight) / 2) + "px";
 
-    if (parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.top.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.top.length - 2)) < document.querySelectorAll("#hsv-map .cover")[0].clientWidth * 0.16 && parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.left.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.left.length - 2)) < document.querySelectorAll("#hsv-map .cover")[0].clientWidth * 0.16) {
-        document.querySelector("#hsv-map .hsv-cursor").style.top = document.querySelectorAll("#hsv-map .cover")[0].clientWidth / 2 + "px";
-        document.querySelector("#hsv-map .hsv-cursor").style.left = document.querySelectorAll("#hsv-map .cover")[0].clientWidth / 2 + "px";
-    }
+    // if (parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.top.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.top.length - 2)) < document.querySelectorAll("#hsv-map .cover")[0].clientWidth * 0.16 && parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.left.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.left.length - 2)) < document.querySelectorAll("#hsv-map .cover")[0].clientWidth * 0.16) {
+    //     // document.querySelector("#hsv-map .hsv-cursor").style.top = document.querySelectorAll("#hsv-map .cover")[0].clientWidth / 2 + "px";
+    //     // document.querySelector("#hsv-map .hsv-cursor").style.left = document.querySelectorAll("#hsv-map .cover")[0].clientWidth / 2 + "px";
+    // }
 
-    if (baseWidth != window.innerWidth || baseHeight != window.innerHeight) {
+    if (baseColHeight != document.querySelector("#left-col").clientHeight || baseWidth != window.innerWidth || baseHeight != window.innerHeight) {
 
-        if (x.matches) {
-            cpRadius = (window.innerHeight * 1.387) * .316;
-            sldHeight = (window.innerHeight * 1.387) * .035;
-            sldMargin = (window.innerHeight * 1.387) * .01;
-            cpBorder = (window.innerHeight * 1.387) * .003;
-            sldHandle = (window.innerHeight * 1.387) * .008;
+        // if (x.matches) {
+        //     cpRadius = (window.innerHeight * 1.387) * .316;
+        //     sldHeight = (window.innerHeight * 1.387) * .035;
+        //     sldMargin = (window.innerHeight * 1.387) * .01;
+        //     cpBorder = (window.innerHeight * 1.387) * .003;
+        //     sldHandle = (window.innerHeight * 1.387) * .008;
+        // }
+        // else {
+        //     cpRadius = window.innerWidth * .316;
+        //     sldHeight = window.innerWidth * .035;
+        //     sldMargin = window.innerWidth * .01;
+        //     cpBorder = window.innerWidth * .003;
+        //     sldHandle = window.innerWidth * .008;
+        // }
+
+        if (document.querySelector("#game-div").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight) {
+            document.querySelector("#game-div").style.marginTop = "calc(" + (((window.innerHeight - document.querySelector("nav").clientHeight) / 2) - (document.querySelector("#game").clientHeight / 2)) + "px + " + gap + "rem)";
         }
-        else {
-            cpRadius = window.innerWidth * .316;
-            sldHeight = window.innerWidth * .035;
-            sldMargin = window.innerWidth * .01;
-            cpBorder = window.innerWidth * .003;
-            sldHandle = window.innerWidth * .008;
-        }
+        else document.querySelector("#game-div").style.marginTop = 0;
 
         resetCPPrefab();
-
-        if (round == 1 && document.querySelector("#testPatch").innerHTML == "#FFFFFF") {
-            document.querySelector("#hsv-map .hsv-cursor").style.top = document.querySelectorAll("#hsv-map .cover")[0].clientWidth / 2 + "px";
-            document.querySelector("#hsv-map .hsv-cursor").style.left = document.querySelectorAll("#hsv-map .cover")[0].clientWidth / 2 + "px";
-            document.querySelector(".hsv-barcursor-l").style.top = "0";
-            document.querySelector(".hsv-barcursor-r").style.top = "0";
-        }
-
-        if (!x.matches) {
-            colorDiscRadius = document.querySelector("#hsv-map .cover").clientHeight / 2;
-            document.querySelector("#hsv-map .hsv-cursor").style.top = parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.top.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.top.length - 2)) * (window.innerWidth / baseWidth) + "px";
-            document.querySelector("#hsv-map .hsv-cursor").style.left = parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.left.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.left.length - 2)) * (window.innerWidth / baseWidth) + "px";
-            document.querySelector(".hsv-barcursor-l").style.top = parseFloat(document.querySelector(".hsv-barcursor-l").style.top.substr(0, document.querySelector(".hsv-barcursor-l").style.top.length - 2)) * (window.innerWidth / baseWidth) + "px";
-            document.querySelector(".hsv-barcursor-r").style.top = parseFloat(document.querySelector(".hsv-barcursor-r").style.top.substr(0, document.querySelector(".hsv-barcursor-r").style.top.length - 2)) * (window.innerWidth / baseWidth) + "px";
-        }
-        else if (x.matches) {
-            colorDiscRadius = document.querySelector("#hsv-map .cover").clientHeight / 2;
-            document.querySelector("#hsv-map .hsv-cursor").style.top = parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.top.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.top.length - 2)) * (window.innerHeight / baseHeight) + "px";
-            document.querySelector("#hsv-map .hsv-cursor").style.left = parseFloat(document.querySelector("#hsv-map .hsv-cursor").style.left.substr(0, document.querySelector("#hsv-map .hsv-cursor").style.left.length - 2)) * (window.innerHeight / baseHeight) + "px";
-            document.querySelector(".hsv-barcursor-l").style.top = parseFloat(document.querySelector(".hsv-barcursor-l").style.top.substr(0, document.querySelector(".hsv-barcursor-l").style.top.length - 2)) * (window.innerHeight / baseHeight) + "px";
-            document.querySelector(".hsv-barcursor-r").style.top = parseFloat(document.querySelector(".hsv-barcursor-r").style.top.substr(0, document.querySelector(".hsv-barcursor-r").style.top.length - 2)) * (window.innerHeight / baseHeight) + "px";
-
-        }
 
         // console.log("ar change!");
         baseWidth = window.innerWidth;
         baseHeight = window.innerHeight;
+        baseColHeight = document.querySelector("#left-col").clientHeight;
     }
 
     if (document.querySelector("#hol").innerHTML == "") {
@@ -1024,17 +603,19 @@ function gameLoop() {
     else document.querySelector("#distance").style.display = "block";
 
     if (theColor[5] > 49) {
-        document.querySelector("#testPatch").style.color = "rgb(34, 34, 34)";
-        document.querySelector("#testPatch").style.borderColor = "rgb(100, 100, 100)";
+        document.querySelector("#test-patch").style.color = "rgb(34, 34, 34)";
+        document.querySelector("#test-patch").style.borderColor = "rgb(100, 100, 100)";
     }
     else {
-        document.querySelector("#testPatch").style.color = "rgb(221, 221, 221)";
-        document.querySelector("#testPatch").style.borderColor = "rgb(155, 155, 155)";
+        document.querySelector("#test-patch").style.color = "rgb(221, 221, 221)";
+        document.querySelector("#test-patch").style.borderColor = "rgb(155, 155, 155)";
     }
+
+    document.querySelector("#back-guess").style.marginBottom = document.querySelector("#back-guess").clientHeight * -1 + "px";
 }
 
 //Sets historyPatch to the color from the numbered guess provided
-function setGuess(historyRound) {
+const setGuess = (historyRound) => {
     if (historyRound > round - 1 || historyRound < 1) return;
     else viewRound = historyRound;
 
@@ -1043,7 +624,7 @@ function setGuess(historyRound) {
     updateHighOrLow(historyRound);
 
     document.querySelector("#history-patch").style.backgroundColor = "rgb(" + colorGuesses[historyRound - 1][0] + "," + colorGuesses[historyRound - 1][1] + "," + colorGuesses[historyRound - 1][2] + ")";
-    document.querySelector("#history-patch").innerHTML = historyRound + "/10";
+    document.querySelector("#history-patch p").innerHTML = historyRound + "/10";
 
     if (colorGuesses[historyRound - 1][5] <= 50) {
         document.querySelector("#history-patch").style.color = "rgb(221, 221, 221)";
@@ -1056,25 +637,23 @@ function setGuess(historyRound) {
 }
 
 // Run when the user pressed the Guess button; Increments the round, triggers input analysis and prints color-closeness results to the screen
-function incrementRound() {
+const incrementRound = () => {
 
     pop.play();
 
     answerColor = new Color("rgb(" + apiData.colors[0].rgb['r'] + "," + apiData.colors[0].rgb['g'] + "," + apiData.colors[0].rgb['b'] + ")");
     // answerColor = [document.querySelector("#color-values").innerHTML.substring(document.querySelector("#color-values").innerHTML.indexOf("(") + 1, document.querySelector("#color-values").innerHTML.indexOf(",")) / 255, document.querySelector("#color-values").innerHTML.substring(document.querySelector("#color-values").innerHTML.indexOf(",") + 1, findNth(document.querySelector("#color-values").innerHTML, ",", 2)) / 255, document.querySelector("#color-values").innerHTML.substring(findNth(document.querySelector("#color-values").innerHTML, ",", 2) + 1, findNth(document.querySelector("#color-values").innerHTML, ",", 3)) / 255];
 
-    console.log
-
     let outArray = highOrLow(answerColor);
 
-    let c = [theColor[0], theColor[1], theColor[2], theColor[3], theColor[4], theColor[5], document.querySelector("#testPatch").innerHTML.substring(1), outArray[0], outArray[1], outArray[2], outArray[3], outArray[4], outArray[5]];
+    let c = [theColor[0], theColor[1], theColor[2], theColor[3], theColor[4], theColor[5], document.querySelector("#test-patch").innerHTML.substring(1), outArray[0], outArray[1], outArray[2], outArray[3], outArray[4], outArray[5]];
 
     //console.log(c);
     colorGuesses[round - 1] = c;
 
     if (round == 1) firstGuessTransition();
 
-    document.querySelector("#history-patch").innerHTML = round + "/10";
+    document.querySelector("#history-patch p").innerHTML = round + "/10";
 
     round++;
 
@@ -1085,7 +664,7 @@ function incrementRound() {
 
     //console.log(document.querySelector("#color-values").innerHTML.substring(0, document.querySelector("#color-values").innerHTML.indexOf(")") + 1));
 
-    document.querySelector("#distance").innerHTML = "You're " + (new Color("rgb(" + theColor[0] + "," + theColor[1] + "," + theColor[2] + ")").distance(answerColor, "srgb") * 100).toFixed(2) + "% away from the color!";
+    document.querySelector("#distance").innerHTML = "You're " + (new Color("rgb(" + theColor[0] + "," + theColor[1] + "," + theColor[2] + ")").distance(new Color(answerColor), "srgb") * 100 / 1.7320508075688772).toFixed(2) + "% away from the color!";
     updateHighOrLow(round - 1);
 
     if (round > 10 || new Color("rgb(" + theColor[0] + "," + theColor[1] + "," + theColor[2] + ")").distance(answerColor, "srgb") * 100 == 0) {
@@ -1095,7 +674,7 @@ function incrementRound() {
 }
 
 //Rearranges game layout to fit appearing elements
-function firstGuessTransition() {
+const firstGuessTransition = () => {
     clearInterval(loop);
 
     document.querySelector("#history-patch").style.display = "block";
@@ -1103,9 +682,11 @@ function firstGuessTransition() {
     document.querySelector("#forward-guess").style.display = "block";
 
     if (window.matchMedia("(min-aspect-ratio: 1000/721)").matches) firstRoundOrientation = 2;
-    else firstRoundOrientation = 1;  
+    else firstRoundOrientation = 1;
 
     updateHighOrLow(1);
+
+    resetCPPrefab();
 
     loop = setInterval(() => gameLoop(), 1);
     return;
@@ -1113,7 +694,7 @@ function firstGuessTransition() {
 
 //Changes the text in highOrLow panel to that sharing information of a previous guess
 //Interprets information from highOrLow's output array thrown into the ES6 ColorGuess class of objects contained by the colorGuesses array
-function updateHighOrLow(historyRound) {
+const updateHighOrLow = (historyRound) => {
     //console.log(colorGuesses);
     let string = "";
     //console.log(colorGuesses[historyRound - 1][7], colorGuesses[historyRound - 1][8], colorGuesses[historyRound - 1][9], colorGuesses[historyRound - 1][10], colorGuesses[historyRound - 1][11], colorGuesses[historyRound - 1][12]);
@@ -1186,10 +767,12 @@ function updateHighOrLow(historyRound) {
     string += "<br>"
 
     document.querySelector("#hol").innerHTML = string;
+
+    resetCPPrefab();
 }
 
 // Returns an array of values indicating the highOrLow values for RGB/HSL
-function highOrLow(answerObj) {
+const highOrLow = (answerObj) => {
 
     let answer = {
         r: answerObj.r * 255,
@@ -1272,7 +855,7 @@ function highOrLow(answerObj) {
 }
 
 // Finds the Nth occurrence of a given character in a string; returns index
-function findNth(string, char, num) {
+const findNth = (string, char, num) => {
     let arr = [];
     let occurrence = 0
 
@@ -1287,14 +870,17 @@ function findNth(string, char, num) {
 }
 
 // Analyzes the current color, deciphers whether the player won, and shows appropriate message on gameEnd screen, which this also transitions the page to.
-function endGame() {
+const endGame = () => {
+
+    gameIsLooping = false;
+
     clearInterval(loop);
 
     fixOtherRatio = false;
 
     colorPicker.on(['color:init'], colorUpdate);
 
-    document.querySelector("#testPatch").style.backgroundColor = "rgb(255,255,255)";
+    document.querySelector("#test-patch").style.backgroundColor = "rgb(255,255,255)";
 
     answerColor = new Color("rgb(" + apiData.colors[0].rgb['r'] + "," + apiData.colors[0].rgb['g'] + "," + apiData.colors[0].rgb['b'] + ")");
 
@@ -1334,9 +920,10 @@ function endGame() {
 
     document.querySelector("#guess-color").style.backgroundColor = "rgb(" + theColor[0] + ", " + theColor[1] + ", " + theColor[2] + ")";
     document.querySelector("#answer-color").style.backgroundColor = "rgb(" + answerColor[0] + ", " + answerColor[1] + ", " + answerColor[2] + ")";
-    document.querySelector("#game").style.position = "absolute";
-    document.querySelector("#game").style.top = "-9999px";
+    //document.querySelector("#game").style.position = "absolute";
+    // document.querySelector("#game").style.top = "-9999px";
     document.querySelector("#distance").innerHTML = "";
+    document.querySelector("#game").style.display = "none";
     document.querySelector("#end-game").style.display = "flex";
     document.querySelector("#back-guess").style.display = "none";
     document.querySelector("#forward-guess").style.display = "none";
@@ -1348,7 +935,7 @@ function endGame() {
         document.querySelector("#end-game p").innerHTML = "You guessed the color!!"
     }
 
-    for (let a of document.querySelectorAll(".down")) a.style.marginBottom = "0";
+    //for (let a of document.querySelectorAll(".down")) a.style.marginBottom = "0";
 
     theColor = [255, 255, 255, 0, 100, 100];
     resetCPPrefab();
@@ -1360,10 +947,12 @@ function endGame() {
     else {
         matchEndOrientation = 1;
     }
+
+    viewRound = 1;
 }
 
 //Prints the correct buttons on historyDiv
-function updateButtons(num) {
+const updateButtons = (num) => {
     if (num == 1 && round == 2) {
         document.querySelector("#back-guess").style.cursor = "default";
         document.querySelector("#forward-guess").style.cursor = "default";
@@ -1415,7 +1004,7 @@ function updateButtons(num) {
 }
 
 // Reloads divs at the bottom of the main page to add the newest game results
-function reloadHistory() {
+const reloadHistory = () => {
     document.querySelector("#history").innerHTML = "";
 
     let i = 1;
@@ -1431,21 +1020,31 @@ function reloadHistory() {
     if (i == 0) document.querySelector("#past-games h1").innerHTML = "<i>Check back here for your game history!</i>"
     else {
         document.querySelector("#past-games h1").innerHTML = "↓ <i>Past Games</i> ↓";
+        let radius = 10;
         for (let j = i; j > 0; j--) {
             let mainDiv = document.createElement("div");
             let color1 = document.createElement("div");
+            color1.style.borderTopLeftRadius = radius + "rem";
+            color1.style.borderTopRightRadius = radius + "rem";
             let color2 = document.createElement("div");
+            color2.style.borderBottomLeftRadius = radius + "rem";
+            color2.style.borderBottomRightRadius = radius + "rem";
             let p1 = document.createElement("p");
             let p2 = document.createElement("p");
             let distance = localStorage.getItem(j.toString());
             p1.innerHTML = "<u>Game " + j.toString() + "</u>";
+            p1.classList.add("is-size-2");
+            p1.classList.add("mt-2");
             p2.innerHTML = "\"" + localStorage.getItem(j.toString() + "k") + "\"<br><i>" + distance + "% Away</i>";
+            p2.classList.add("is-size-4");
+            p2.classList.add("history-text");
             color1.style.backgroundColor = "rgb(" + localStorage.getItem(j.toString() + "g").substring(0, localStorage.getItem(j.toString() + "g").indexOf(",")) + ", " + localStorage.getItem(j.toString() + "g").substring(findNth(localStorage.getItem(j.toString() + "g"), ",", 1) + 1, findNth(localStorage.getItem(j.toString() + "g"), ",", 2)) + ", " + localStorage.getItem(j.toString() + "g").substring(findNth(localStorage.getItem(j.toString() + "g"), ",", 2) + 1) + ")";
             color2.style.backgroundColor = "rgb(" + localStorage.getItem(j.toString() + "r").substring(0, localStorage.getItem(j.toString() + "r").indexOf(",")) + ", " + localStorage.getItem(j.toString() + "r").substring(findNth(localStorage.getItem(j.toString() + "r"), ",", 1) + 1, findNth(localStorage.getItem(j.toString() + "r"), ",", 2)) + ", " + localStorage.getItem(j.toString() + "r").substring(findNth(localStorage.getItem(j.toString() + "r"), ",", 2) + 1) + ")";
             mainDiv.appendChild(p1);
             mainDiv.appendChild(color1);
             mainDiv.appendChild(color2);
             mainDiv.appendChild(p2);
+            if(j < 3) mainDiv.style.marginBottom = "2rem";
             document.querySelector("#history").appendChild(mainDiv);
             // console.log("added to history");
         }
@@ -1453,10 +1052,10 @@ function reloadHistory() {
 }
 
 // Launched when the button on the gameEnd screen is pressed; transitions back to the Main Menu
-function backToMenu() {
+const backToMenu = () => {
     whip.play();
     document.querySelector("#end-game").style.display = "none";
-    document.querySelector("#main-menu").style.display = "flex";
+    //document.querySelector("#main-menu").style.display = "flex";
     document.querySelector("#past-games").style.display = "block";
     document.querySelector("#main-footer").style.display = "block";
     document.querySelector("#game").style.display = "none";
@@ -1465,12 +1064,12 @@ function backToMenu() {
     colorGuesses = [];
     document.querySelector("#guess-number").innerHTML = round + " / 10";
     document.querySelector("#hol").innerHTML = "";
-    document.querySelector("#the-word").innerHTML = "Your clue is...<br>\"\"";
-
+    document.querySelector("#the-word").innerHTML = "<img id=\"loading-gif\" src=\"media/Loading.gif\" alt=\"rainbow loading graphic\"> <p id=\"the-clue\" class=\"is-size-2\">Your clue is...<br>\"_______\"</p>";
+    document.querySelector("#main-menu").style.display = "block";
 }
 
 // Updates the number boxes next to the color sliders on the game screen
-function setBoxes() {
+const setBoxes = () => {
     // document.querySelector("#tR").innerHTML = document.querySelector("#color-values").innerHTML.substring(document.querySelector("#color-values").innerHTML.indexOf("(") + 1, document.querySelector("#color-values").innerHTML.indexOf(","));
     // document.querySelector("#tG").innerHTML = document.querySelector("#color-values").innerHTML.substring(document.querySelector("#color-values").innerHTML.indexOf(",") + 1, findNth(document.querySelector("#color-values").innerHTML, ",", 2));
     // document.querySelector("#tB").innerHTML = document.querySelector("#color-values").innerHTML.substring(findNth(document.querySelector("#color-values").innerHTML, ",", 2) + 1, findNth(document.querySelector("#color-values").innerHTML, ",", 3));
@@ -1481,7 +1080,7 @@ function setBoxes() {
 }
 
 // Adds the appropriate border to each game result div's inner color divs
-function reloadHistoryColors() {
+const reloadHistoryColors = () => {
     for (let d of document.querySelectorAll("#history div div")) {
         if (i == 1) {
             d.style.borderTop = "0.2vw solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 30) + "%)";
@@ -1501,81 +1100,102 @@ function reloadHistoryColors() {
 }
 
 // Sets most of the site to a random color's monochrome pallette
-function setSiteColor() {
+const setSiteColor = () => {
+
+    document.querySelector("#s").style.display = "none";
 
     if (h != 0 || l != 0 || s != 0) pop.play();
 
-    // Get random color
-    h = Math.random() * 360 - 5;
-    s = Math.random() * 35 + 15;
-    l = Math.random() * 15 + 45;
-
-    let color = new Color("hsl", [h, s, l]);
-    let r = color.srgb[0] * 255;
-    let g = color.srgb[1] * 255;
-    let b = color.srgb[2] * 255;
-    let hex = convertRGBtoHex(r, g, b);
-
-    if (l - 10 <= 50) {
-        document.querySelector("#past-games").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    }
-    else {
-        document.querySelector("#past-games").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 40) + "%)";
-    }
-
-    if (l - 15 <= 50) {
-        document.querySelector("#main-footer").style.color = "white";
-    }
-    else {
-        document.querySelector("#main-footer").style.color = "black";
-    }
-
-    //Unless there's a better way to set CSS through javascript that I'm not aware of, this is necessary unfortunately
-
-    document.querySelector("#main-menu").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#main-footer").style.backgroundColor = "hsl(" + (h + 12.5) + "," + s + "%," + (l - 15) + "%)";
-    document.querySelector("#past-games").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
-    document.querySelector("#main-menu").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#start").style.backgroundColor = "hsl(" + (h + 7.5) + "," + s + "%," + (l - 20) + "%)";
-    document.querySelector("#change-color").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
-    document.querySelector("#help").style.backgroundColor = "hsl(" + (h + 12.5) + "," + s + "%," + (l - 10) + "%)";
-    document.body.style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    //document.querySelector("#hideCursorGlitchDiv").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
-    document.querySelector("#sliders-back").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#num-back").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#guess-button").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#guess-button").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#tut-button-1").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#tut-button-1").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#tut-button-2").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#tut-button-2").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#tut-button-3").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#tut-button-3").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#tut-button-4").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#tut-button-4").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#tut-button-5").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#tut-button-5").style.border = "solid hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#the-word").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#the-word").style.backgroundColor = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 25) + "%)";
-    document.querySelector("#the-word").style.border = "solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#high-or-low").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#distance").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#distance").style.backgroundColor = "white";
-    document.querySelector("#guess-color").style.borderLeft = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#guess-color").style.borderTop = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#guess-color").style.borderBottom = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#guess-color").style.borderRight = "none";
-    document.querySelector("#answer-color").style.borderRight = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#answer-color").style.borderTop = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#answer-color").style.borderBottom = "0.5vw solid hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#answer-color").style.borderLeft = "none";
-    document.querySelector("#game").style.backgroundColor = "hsl(" + (h + 5) + "," + s + "%," + (l - 10) + "%)";
-    document.querySelector("#end-game").style.backgroundColor = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 30) + "%)";
-    document.querySelector("#end-game").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l + 15) + "%)";
-    document.querySelector("#end-game button").style.backgroundColor = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#end-game button").style.color = "hsl(" + (h + 5) + "," + (s - 25) + "%," + (l - 30) + "%)";
-    document.querySelector("#color-title-1").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
-    document.querySelector("#color-title-2").style.color = "hsl(" + h + "," + s + "%," + l + "%)";
-
     changeSVG();
+
+    document.querySelector("#cmby").style.marginBottom = "-" + document.querySelector("#cmby").clientHeight + "px";
+    document.querySelector("#s").style.display = "block";
+}
+
+//Define variables
+let apiData;
+let colorDiscRadius;
+let theColor;
+let answerColor;
+let colorDistance;
+let round;
+let matchEndOrientation;
+let firstRoundOrientation;
+let fixOtherRatio;
+let black;
+let white;
+let mainLoop;
+let loop;
+let baseWidth;
+let baseHeight;
+let colorGuesses;
+let viewRound;
+let pop;
+let whip;
+let h;
+let s;
+let l;
+let search;
+let colorPicker;
+let cpDiv;
+let cpRadius;
+let cpBorder;
+let sldHeight;
+let sldMargin;
+let sPlaceholder;
+let sldHandle;
+let historyRound;
+let baseColHeight;
+let gap;
+let gameIsLooping;
+let i;
+
+window.onload = () => {
+
+    let start = document.querySelector("#start");
+
+    theColor = [255, 255, 255, 0, 100, 100];
+    round = 1;
+    matchEndOrientation = 0;
+    firstRoundOrientation = 0;
+    fixOtherRatio = false;
+    start.addEventListener("click", startGame);
+    document.querySelector("#guess-button").onclick = incrementRound;
+    // document.querySelector("#help").onclick = tutorialStart;
+    black = new Color("rgb(0,0,0)");
+    white = new Color("rgb(128,128,128)");
+    document.querySelector("#back-to-menu").onclick = backToMenu;
+    document.querySelector("body").onmousemove = setBoxes;
+    document.querySelector("body").onmousedown = setBoxes;
+    document.querySelector("body").onclick = setBoxes;
+    document.querySelector("#change-color").onclick = () => {
+        document.querySelector("#s").style.display = "none";
+        setSiteColor();
+    };
+    mainLoop = setInterval(() => foreverLoop(), 1);
+    pop = new Audio("media/Pop.mp3");
+    whip = new Audio("media/Whip.mp3");
+    baseWidth = document.innerWidth;
+    baseHeight = document.innerHeight;
+    colorGuesses = new Array(10);
+    viewRound = 1;
+    h = 0;
+    s = 0;
+    l = 0;
+    gap = 3;
+    gameIsLooping = false;
+    i = 1;
+
+    const burgerIcon = document.querySelector('#burger');
+    const navbarMenu = document.querySelector('#nav-links')
+
+    burgerIcon.addEventListener('click', () => {
+        navbarMenu.classList.toggle('is-active');
+    });
+
+    setSiteColor();
+
+    reloadHistory();
+
+    reloadHistoryColors();
 }
