@@ -109,7 +109,7 @@ const resetCPPrefab = (hsl = false) => {
     colorUpdate();
 }
 
-const colorUpdate = (color) => {
+const colorUpdate = () => {
     theColor = [colorPicker.color.rgb['r'], colorPicker.color.rgb['g'], colorPicker.color.rgb['b'], colorPicker.color.hsl['h'], colorPicker.color.hsl['s'], colorPicker.color.hsl['l']];
     document.querySelector("#test-patch").innerHTML = colorPicker.color.hexString.toUpperCase();
     document.querySelector("#test-patch").style.backgroundColor = colorPicker.color.rgbString;
@@ -139,7 +139,7 @@ const colorUpdate = (color) => {
                 break;
         }
         document.querySelector("#" + label[i].toLowerCase() + "-text").innerHTML = text;
-    };
+    }
     document.querySelector(".IroColorPicker").style.width = (document.querySelector("#left-col").clientWidth / 3) * 2;
     document.querySelector("#picker").style.width = (document.querySelector("#cp").clientWidth / 3) * 2;
     document.querySelector("#color-picker").style.width = (document.querySelector("#cp").clientWidth / 3) * 2;
@@ -304,13 +304,6 @@ const startGame = () => {
     resetCPPrefab();
 
     loop = setInterval(() => gameLoop(), 1);
-
-    setTimeout(() => {
-        if (document.querySelector("#game-div").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight) {
-            document.querySelector("#game-div").style.marginTop = "calc(" + (((window.innerHeight - document.querySelector("nav").clientHeight) / 2) - (document.querySelector("#game").clientHeight / 2)) + "px + " + gap + "rem)";
-        }
-        else document.querySelector("#game-div").style.marginTop = 0;
-    }, 1);
 
     document.querySelector(".IroWheel").click();
 }
@@ -495,8 +488,8 @@ const foreverLoop = () => {
 
     //console.log(colorPicker.color.hsl['l']);
 
-    const x = window.matchMedia("(min-aspect-ratio: 1000/721)");
-    const y = window.matchMedia("(max-height: 490px)");
+    //const x = window.matchMedia("(min-aspect-ratio: 1000/721)");
+    //const y = window.matchMedia("(max-height: 490px)");
 
     //Forgive me... you can't do multiple layouts in a transition like this thru raw css afaik
     if (round > 1) {
@@ -507,13 +500,28 @@ const foreverLoop = () => {
 // Runs frequently; checks several things regarding screen layout that can't be updated through css
 const gameLoop = () => {
 
-    document.querySelector("body").style.height = "calc(" + (document.querySelector("#game").clientHeight + document.querySelector("#end-game").clientHeight) + "px + 10.75rem)";
+    if(!((round == 1 && document.querySelector("#game-div").clientHeight > 1000) || (round > 1 && document.querySelector("#game-div").clientHeight > 1000))) document.querySelector("body").style.height = (window.innerHeight) + "px";
 
-    let x = window.matchMedia("(min-aspect-ratio: 1000/721)");
+
+    if (document.querySelector("#game .columns").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight) {
+        document.querySelector("#game").style.height = (window.innerHeight - document.querySelector("nav").clientHeight) + "px";
+        document.querySelector("#game-div").style.marginTop = "calc(" + (((window.innerHeight - document.querySelector("nav").clientHeight) / 2) - (document.querySelector("#game .columns").clientHeight / 2)) + "px + " + gap + "rem)";
+        console.log((window.innerHeight - document.querySelector("nav").clientHeight) + "px");
+    }
+    else {
+        document.querySelector("#game-div").style.marginTop = 0;
+        document.querySelector("#game").style.height = "auto";
+        document.querySelector("body").style.height = (document.querySelector("#game").style.height + document.querySelector("nav").clientHeight) + "px";
+    }
+
+    console.log(document.querySelector("#game .columns").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight);
+
+    //let x = window.matchMedia("(min-aspect-ratio: 1000/721)");
     let iroHeight = document.querySelector("div .IroWheelBorder").clientHeight;
     for (let a of document.querySelectorAll(".IroSlider")) iroHeight += a.clientHeight;
 
     if ((round == 1 && document.querySelector("#game-div").clientHeight > 1000) || (round > 1 && document.querySelector("#game-div").clientHeight > 1000)) {
+        //document.querySelector("body").style.height = (document.querySelector("game").clientHeight + document.querySelector("nav").clientHeight) + "px";
         document.querySelector("#picker").style.top = "0px";
         document.querySelector("#values-box").style.right = ((document.querySelector("#game-div").clientWidth) / 4) - ((document.querySelector("#values-box").clientWidth) / 2) + "px";
         document.querySelector("#values-box").style.top = "calc(" + (document.querySelector("#left-col").clientHeight + ((iroHeight / 2) - (document.querySelector("#values-box").clientHeight / 2))) + "px + 3rem)";
@@ -578,11 +586,6 @@ const gameLoop = () => {
         //     cpBorder = window.innerWidth * .003;
         //     sldHandle = window.innerWidth * .008;
         // }
-
-        if (document.querySelector("#game-div").clientHeight < window.innerHeight - document.querySelector("nav").clientHeight) {
-            document.querySelector("#game-div").style.marginTop = "calc(" + (((window.innerHeight - document.querySelector("nav").clientHeight) / 2) - (document.querySelector("#game").clientHeight / 2)) + "px + " + gap + "rem)";
-        }
-        else document.querySelector("#game-div").style.marginTop = 0;
 
         resetCPPrefab();
 
@@ -856,7 +859,7 @@ const highOrLow = (answerObj) => {
 
 // Finds the Nth occurrence of a given character in a string; returns index
 const findNth = (string, char, num) => {
-    let arr = [];
+    //let arr = [];
     let occurrence = 0
 
     for (let i = 0; i < string.length; i++) {
@@ -924,6 +927,7 @@ const endGame = () => {
     // document.querySelector("#game").style.top = "-9999px";
     document.querySelector("#distance").innerHTML = "";
     document.querySelector("#game").style.display = "none";
+    document.querySelector("#end-game-section").style.display = "block";
     document.querySelector("#end-game").style.display = "flex";
     document.querySelector("#back-guess").style.display = "none";
     document.querySelector("#forward-guess").style.display = "none";
@@ -1054,6 +1058,7 @@ const reloadHistory = () => {
 // Launched when the button on the gameEnd screen is pressed; transitions back to the Main Menu
 const backToMenu = () => {
     whip.play();
+    document.querySelector("#end-game-section").style.display = "none";
     document.querySelector("#end-game").style.display = "none";
     //document.querySelector("#main-menu").style.display = "flex";
     document.querySelector("#past-games").style.display = "block";
@@ -1182,7 +1187,7 @@ window.onload = () => {
     h = 0;
     s = 0;
     l = 0;
-    gap = 3;
+    gap = -2;
     gameIsLooping = false;
     i = 1;
 

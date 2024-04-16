@@ -197,7 +197,7 @@ const App = () => {
           </div>
         </div>
       </section>
-      <section className="section">
+      <section className="section" id="end-game-section">
         <div className="container" id="end-game">
           <p></p>
           <div id="color-titles">
