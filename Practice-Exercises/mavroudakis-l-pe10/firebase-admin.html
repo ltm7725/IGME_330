@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Firebase Admin</title>
+</head>
+
+<body>
+    <h1>High Scores</h1>
+    <ul id="scoresList">
+        <li>No data yet!</li>
+    </ul>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoLCuyTCBO-v4lRBvbh5gz1wUdgFdjxpM",
+            authDomain: "high-scores-63e2e.firebaseapp.com",
+            projectId: "high-scores-63e2e",
+            storageBucket: "high-scores-63e2e.appspot.com",
+            messagingSenderId: "200034231068",
+            appId: "1:200034231068:web:8f686c9f6748cd374650d9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        console.log(app); // make sure firebase is loaded
+
+
+
+        // #2 NEW STUFF
+        const db = getDatabase();
+        const scoresRef = ref(db, 'scores');
+
+        const scoresChanged = (snapshot) => {
+            document.querySelector("ul").innerHTML = "";
+            snapshot.forEach(score => {
+                const childKey = score.key;
+                const childData = score.val();
+                console.log(childKey, childData);
+                let line = document.createElement('li');
+                line.innerHTML = childData['userId'] + " - " + childData['game'] + " - " + childData['score'];
+                document.querySelector("ul").appendChild(line);
+            });
+        }
+
+        onValue(scoresRef, scoresChanged);
+
+    </script>
+</body>
+
+</html>

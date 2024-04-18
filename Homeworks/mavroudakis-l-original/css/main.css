@@ -1,0 +1,1053 @@
+/*FROM COLORPICKER*/
+a {
+	color: #aaaaaa;
+	font-weight: bold;
+}
+
+/* #testPatch {
+	font-weight: bolder;
+	position: absolute;
+	text-align: center;
+	font-family: Courier,mono;
+	cursor: default;
+    width: 16.25vw; 
+	height: 6.5vw; 
+	line-height: 6.5vw; 
+	font-size: 3vw; 
+	top: 19vw; 
+	left: 52vw; 
+} */
+#testPatch {
+	font-weight: bolder;
+	position: absolute;
+	text-align: center;
+	font-family: Courier,mono;
+	cursor: default;
+    width: 16.25vw; 
+	height: 6.5vw; 
+	line-height: 6.5vw; 
+	font-size: 3vw; 
+	top: 21vw;
+	left: 60.5vw; 
+}
+#backGuess, #forwardGuess{
+	display: none;
+	cursor: pointer;
+	z-index: 1;
+	background-color: transparent;
+	position: absolute;
+	background-size: 100% 100%;
+	width: 3vw;
+	height: 3vw;
+}
+#backGuess{
+	background-image: url("../media/backClickableBlack.png");
+	top: 38.8vw;
+	left: 77vw;
+}
+#forwardGuess{
+	background-image: url("../media/frwdClickableBlack.png");
+	top: 38.8vw;
+	left: 88.25vw;
+}
+#historyPatch{
+	display: none;
+	font-weight: bolder;
+	position: absolute;
+	text-align: center;
+	font-family: Courier,mono;
+	cursor: default;
+	width: 16.25vw;
+	height: 6.5vw;
+	line-height: 6.5vw;
+	font-size: 3vw;
+}
+#contrastPatch {
+	display: none;
+}
+#testPatch, #historyPatch{
+	border: .2vw solid rgb(181, 181, 181); 
+}
+#colorValues {
+	position: relative;
+	display: none;
+	height: 102px;
+	width: 200px;
+    margin-top: 200px;
+    margin-left: -9999px;
+	font-family: Courier,mono;
+	border: 1px solid #444;
+	color: #aaaaaa;
+	padding: 2px 0px 2px 4px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	font-size: 14px;
+	white-space: pre-wrap;
+	line-height: 16px;
+	background-color: #222;
+	cursor: default;
+}
+#sliders div{
+	border: .2vw solid rgb(181, 181, 181); 
+}
+/* #sliders{
+	position: absolute;
+	top: 48vw;
+	left: -1.5vw;
+} */
+#sliders{
+	position: absolute;
+	top: 41vw;
+	left: -1.5vw;
+}
+#sliders div div{
+	margin-top: -.2vw; 
+	margin-left: -.2vw; 
+	
+	border-right: 1vw solid rgb(85, 85, 85); 
+}
+.sliders {
+	position: relative;
+	width: 30vw; 
+	height: 1vw; 
+    margin-top: -14.3vw; 
+    float: right;
+    margin-right: 8vw; 
+}
+.sliders div {
+	height: 2.5vw; 
+	margin-bottom: .45vw; 
+	border: 1px solid #444;
+	background-color: #222;
+	width: 36.5vw; 
+}
+.sliders div div {
+	height: 2.5vw; 
+	margin-top: -.05vw; 
+	border: none;
+	background-color: rgb(155, 155, 155);
+	border-right: 1.5vw solid #555; 
+}
+#slidersBack{
+	position: absolute;
+	height: 19vw;
+	width: 13.75vw;
+}
+#rolloverDiv{
+	display: none;
+}
+#numBack{
+	position: absolute;
+	width: 17.75vw;
+	height: 9vw;
+}
+#rgbr{
+	content: "";
+}
+#rgbr {
+	background-color: #0ff;
+}
+#rgbg {
+	background-color: #f0f;
+}
+#rgbb {
+	background-color: #ff0;
+}
+#rgbr div {
+	background-color: #c00;
+}
+#rgbg div {
+	background-color: #0a0;
+}
+#rgbb div {
+	background-color: #00f;
+}
+#cmyc div {
+	background-color: #0ff;
+}
+#cmym div {
+	background-color: #f0f;
+}
+#cmyy div {
+	background-color: #ff0;
+}
+#rgbr:after, #rgbg:after, #rgbb:after,
+#hslh:after, #hsls:after, #hsll:after,
+#cmyc:after, #cmym:after, #cmyy:after{
+	z-index: 11;
+	float: left;
+	font-weight: bolder;
+	color: black;
+	
+	font-family: Courier,mono;
+	font-size: 2vw; 
+	cursor: default;
+}
+#rgbr:after {
+	content: '⠀⠀⠀⠀⠀ R';	
+	margin-top: -6vw; 
+	margin-left: 37.5vw; 
+}
+#rgbg:after {
+	content: '⠀⠀⠀⠀⠀ G';	
+	margin-left: 37.5vw; 
+	margin-top: -6vw; 
+}
+#rgbb:after {
+	content: '⠀⠀⠀⠀⠀ B';	
+	margin-left: 37.5vw; 
+	margin-top: -6vw; 
+}
+#hslh:after {
+	content: "H⠀⠀⠀⠀⠀⠀⠀°";
+	margin-left: 37.5vw; 
+	margin-top: -3vw; 
+}
+#hsls:after {
+	content: "S⠀⠀⠀⠀⠀⠀⠀%";
+	margin-left: 37.5vw; 
+	margin-top: -3vw; 
+}
+#hsll:after {
+	content: "L⠀⠀⠀⠀⠀⠀⠀%";
+	margin-left: 37.5vw; 
+	margin-top: -3vw; 
+}
+#cmyc:after {
+	content: 'C';	
+}
+#cmym:after {
+	content: 'M';	
+}
+#cmyy:after {
+	content: 'Y';	
+}
+/* #hsv_map {
+    z-index: 1;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0vw;
+	left: 0vw;
+} */
+#hsv_map {
+    z-index: 1;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: -8vw;
+	left: 0vw;
+}
+#surface {
+	position: absolute;
+	z-index: 0;
+    color: white;
+	width: 100%;
+	top: 0;
+}
+#hsv_map .cover {
+    z-index: 2;
+    width: 31.6vw; 
+    height: 31.6vw; 
+	opacity: 0;
+	background-color: #000;
+	border-radius: 50%;
+	cursor: crosshair;
+}
+.bar-bg, .bar-white, #luminanceBar, .hsv-barcursors{
+    position: absolute;
+}
+.bar-bg, .bar-white, #luminanceBar, .hsv-barcursors, #hsv_map .bar-bg, #hsv_map .bar-white{
+	position: absolute;
+	width: 9.6vw; 
+	height: 31.6vw; 
+	top: 0;
+	left: 33.5vw; 
+}
+#hsv_map .bar-white {
+	background-color: #fff;
+}
+.hsv-cursor {
+	z-index: 1;
+	position: absolute;
+	border: 1px solid rgb(255, 255, 255);
+	border-radius: 50%;
+	width: 1vw;
+	height: 1vw;
+	cursor: default;
+	margin: -5px;
+	cursor: crosshair;
+}
+.dark .hsv-cursor {
+	border-color: rgb(0, 0, 0);
+}
+.no-cursor .hsv-cursor, #hsv_map.no-cursor .cover {
+	cursor: none; /* also works in IE8 */
+	/*url(_blank.gif), url(_blank.png), url(_blank.cur), auto;*/
+}
+#luminanceBar {
+	position: absolute;
+	right: -1vw;
+	top: 0;
+	background: url("../media/tp.png");
+	background-size: 100% 100%;
+	/* background-color: red; */
+}
+.hsv-barcursors {
+	position: absolute;
+	right: -1vw;
+	top: 0;
+	overflow: hidden;
+}
+.hsv-barcursor-l, .hsv-barcursor-r {
+	position: absolute;
+	border: .5vw solid transparent; 
+	margin-top: -4px;
+}
+.hsv-barcursor-l {
+	left: 0;
+	border-left: 4px solid #eee;
+}
+.hsv-barcursor-r {
+	right: 0;
+	border-right: 4px solid #eee;
+}
+.dark .hsv-barcursor-l {
+	border-left-color: rgb(255, 255, 255);
+}
+.dark .hsv-barcursor-r {
+	border-right-color: rgb(255, 255, 255);
+}
+
+#color_squares {
+	position: absolute;
+    top: -15vw; 
+	width: 204%;
+}
+#color_squares div {
+    z-index: 3;
+    position:relative;
+    display: none;
+	width: 3.5vw; 
+	height: 3.5vw; 
+	margin-left: 0;
+	margin-right: 2.2vw; 
+	float: left;
+	border: .2vw solid rgb(85, 85, 85);
+}
+#color_squares div:nth-child(1){
+    margin-top: 6vw;
+    margin-left: 1vw;
+}
+#color_squares div:nth-child(2){
+    margin-top: 10.5vw;
+    margin-left: -4.5vw;
+}
+#color_squares div:nth-child(3){
+    margin-top: 14.75vw;
+    margin-left: 1vw;
+}
+#color_squares div:nth-child(4), #color_squares div:nth-child(5){
+    margin-top: 14.75vw;
+    margin-left: 1vw;
+}
+#color_squares div:nth-child(6){
+    margin-top: 14.75vw;
+    margin-left: 1vw;
+}
+#color_squares div:nth-child(7){
+    margin-top: 10vw;
+    margin-left: 1vw;
+}
+#color_squares div:nth-child(8){
+    margin-top: 6vw;
+    margin-left: -4.5vw;
+}
+
+#mainMenu{
+    display: flex;
+    height: 90vh;
+	width: 100%;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+#interactive{
+	color: white;
+}
+#mainMenu button{
+	color: white;
+}
+#menuObj{
+	display: flex;
+	width: 100%;
+	min-height: 455px;
+	height: 90vw;
+	justify-content: center;
+	align-items: center;
+}
+#mainMenu h2{
+	margin-top: 40vw;
+}
+h1{
+	width: 100%;
+	text-align: center;
+	font-size: 4vh;
+	margin: 1.5vw auto;
+	margin-bottom: 0;
+}
+#interactive{
+	cursor: default;
+	position: absolute;
+	display: flex;
+	flex-flow: column;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	margin-top: -5vh;
+}
+.bigLogo{
+	position: relative;
+    width: 60vw;
+	height: 30vw;
+	margin-top: -19vh;
+}
+#cmby{
+	margin-right: -60%;
+}
+h2{
+    text-align: center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2vw;
+    font-style: italic;
+	margin-bottom: 1vh;
+}
+button{
+	border: none;
+    width: 12vw;
+    height: 5vw;
+    font-size: 4vw;
+	padding-bottom: 6vw;
+	margin-bottom: 15vh;
+}
+#changeColor{
+	width: 27.5vw;
+}
+.alpha-bg-w{
+    display: none;
+	position: absolute;
+	top: -9999px;
+}
+#description select{
+    display: block;
+}
+text{
+    display: block;
+}
+#game, #tutorialScreen{
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 72.1vw;
+}
+#tutorialScreen{
+	position: absolute;
+	background-size: 100% 100%;
+	z-index: 100;
+}
+#cp{
+	position: absolute;
+	top: 18vw; 
+	width: 31.6vw; 
+	height: 31.6vw; 
+	left: 6.9vw; 
+}
+/* #theWord{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: absolute;
+	top: 12.4vw; 
+	left: 59vw; 
+	width: 33vw; 
+	height: 16vw; 
+	font-size: 3.5vw; 
+	padding-top: 2vw; 
+} */
+#theWord{
+	cursor: default;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: absolute;
+	top: 21vw; 
+	left: 59vw; 
+	width: 33vw; 
+	height: 16vw; 
+	font-size: 3.5vw; 
+	padding-top: 1vw; 
+}
+/* #guessButton{
+	position: absolute;
+	top: 7vw; 
+	left: 14vw; 
+	width: 32vw; 
+	height: 8.6vw; 
+	font-size: 5vw; 
+	line-height: 8.6vw; 
+} */
+#guessButton, #tutButton1, #tutButton2, #tutButton3, #tutButton4, #tutButton5{
+	position: absolute;
+	color: white;
+	top: 47.5vw; 
+	left: 59.5vw; 
+	width: 32vw; 
+	height: 8.6vw; 
+	font-size: 5vw; 
+	line-height: 8.6vw; 
+}
+#tutButton1, #tutButton2, #tutButton3, #tutButton4, #tutButton5{
+	display: none;
+}
+#tutButton2, #tutButton5{
+	line-height: 7vw; 
+	height: 15vw; 
+}
+#tutButton3{
+}
+/* #guessNumber{
+	position: absolute;
+	text-align: center;
+	width: 18vw; 
+	top: 4vw; 
+	left: 66.1vw; 
+	font-size: 5vw; 
+} */
+#guessNumber{
+	color: white;
+	cursor: default;
+	position: absolute;
+	text-align: center;
+	width: 18vw; 
+	top: 13vw; 
+	left: 66.1vw; 
+	font-size: 5vw; 
+}
+#highOrLow{
+	cursor: default;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	width: 35vw;
+	height: 22vw;
+	padding: 1vw;
+	top: 45vw;
+	left: 58vw;
+	font-size: 2.5vw;
+	line-height: 3vw;
+	float: left;
+}
+#hol{
+	color: white;
+	padding-top: 1.5vw;
+}
+#endGame{
+	cursor: default;
+	display: none;
+	flex-flow: column;
+	height: 100vh;
+	width: 100vw;
+	background-color:gray;
+	justify-content: center;
+	align-items: center;
+}
+
+#endGame p{
+	float: left;
+	font-size: 5vw;
+	color: white;
+	margin-top: 7vw;
+}
+#backToMenu{
+	float: left;
+	clear: left;
+	text-underline-offset: 0.5vw;
+	text-decoration: underline;
+	width: 25vw;
+	font-size: 3vw;
+	padding-top: 1vw;
+	margin-top: 5vw;
+}
+#colors{
+	display: flex;
+	flex-flow: row;
+}
+#colorTitles{
+	display: flex;
+	flex-flow: row;
+}
+#colorTitle1, #colorTitle2{
+	float: left;
+	font-size: 2vw;
+	text-underline-offset: 0.5vw;
+	text-decoration: underline;
+	margin: 0 2.5vw;
+	margin-bottom: 1vw;
+	color: white;
+}
+#guessColor, #answerColor{
+	float: left;
+	width: 15vw;
+	height: 15vw;
+	margin: 0;
+	background-color: #0a0;
+}
+#inputs{
+	cursor: default;
+	display: flex;
+	flex-flow: column;
+}
+#tR, #tG, #tB, #tH, #tS, #tL{
+	font-weight: bolder;
+	color: white;
+	font-size: 2vw; 
+	margin-left: 36.3vw; 
+	z-index: 10;
+	width: 5vw; 
+	height: 2.5vw;
+	padding: 0;
+	text-align: center;
+	margin-bottom: .08vw; 
+}
+/* #inputs{
+	position: absolute;
+	top: 31.3vw;
+	left: 2vw;
+} */
+#inputs{
+	position: absolute;
+}
+#tR{
+	margin-top: 2.1vw; 
+}
+#tG, #tB, #tH, #tS, #tL{
+	margin-top: .35vw; 
+}
+#distance{
+	cursor: default;
+	position: absolute;
+	padding: 1vw;
+	top: 30vw;
+	right: 4vw; 
+	font-size: 2.5vw;
+}
+div{
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+body{
+	justify-content: center;
+	align-items: center;
+}
+#luminanceBar{
+	border: .2vw solid rgb(85, 85, 85); 
+}
+#pastGames{
+	cursor: default;
+	float: left;
+	display: block;
+	width: 100%;
+	background-color:lightgray;
+	padding-bottom: 2vw;
+}
+#pastGames h1{
+	margin-top: 1vw;
+	font-size: 3vw;
+	float: left;
+}
+#pastGames div{
+	color: white;
+}
+#history{
+	float: left;
+	clear: left;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+#history > div{
+	width: 26vw;
+	text-align: center;
+	margin: 1vw 3vw;
+	height: 18vw;
+}
+#history div div{
+	height: 5vw;
+	border: .2vw black solid;
+}
+#history p{
+	font-size: 1.5vw;
+}
+#history p:nth-child(1){
+	margin-top: 1vw;
+	margin-bottom: 0.5vw;
+	font-size: 2.5vw;
+}
+#mainFooter{
+	float: left;
+	clear: left;
+	width: 100%;
+	background-color: white;
+	text-align: center;
+	font-size: 1.5vw;
+	padding: 3vw;
+}
+#mainFooter p{
+	text-align: left;
+}
+body, html{
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+}
+a:link, a:visited, a:focus, a:hover, a:active{
+	color: white;
+}
+text{
+	display: none;
+	text-indent: -9999px;
+}
+#description{
+	display: none;
+}
+#loading{
+	display: none;
+	position: absolute;
+	top: 28.5vw;
+	left: 71.5vw;
+	z-index: 5;
+	width: 7vw;
+}
+#arrows{
+	flex-direction: column;
+	z-index: 100;
+	position: absolute;
+}
+.up{
+	cursor: pointer;
+	background-image: url("../media/upArrow1.png");
+	background-size: 100% 100%;
+	width: 2vw;
+	height: 1vw;
+	margin-bottom: .2vw;
+}
+.up:hover{
+	background-image: url("../media/upArrow2.png");
+}
+.down{
+	cursor: pointer;
+	background-image: url("../media/downArrow1.png");
+	background-size: 100% 100%;
+	width: 2vw;
+	height: 1vw;
+	margin-bottom: .7vw;
+}
+.down:hover{
+	background-image: url("../media/downArrow2.png");
+}
+#hideCursorGlitchDiv{
+	position: absolute;
+	z-index: 100;
+	top: 7.5vw;
+	left: 4.5vw;
+	width: 5vw;
+	height: 5vw;
+}
+#tutorialScreen{
+	display: none;
+}
+
+/*Launches when aspect ratio wider than game block*/
+@media only screen and (min-aspect-ratio: 1000/721){
+#game, #tutorialScreen{
+	height: 100vh;
+	width: 138.7vh;
+	margin-left: calc(50vw - 69.35vh);
+}
+#hsv_map .cover {
+	width: calc(138.7vh * .316);
+	height: calc(138.7vh * .316);
+}
+/* #hsv_map{
+	top: 0;
+	left: calc(138.7vh * .019);
+} */
+#hsv_map {
+	top: calc(138.7vh * -.08);
+	left: calc(138.7vh * .019);
+}
+#cp{
+	position: absolute;
+	top: calc(138.7vh * .18); 
+	width: calc(138.7vh * .316); 
+	height: calc(138.7vh * .316); 
+	left: calc(138.7vh * .05);
+}
+.bar-bg, .bar-white, #luminanceBar, .hsv-barcursors, #hsv_map .bar-bg, #hsv_map .bar-white{
+	width: calc(138.7vh * .096); 
+	height: calc(138.7vh * .316); 
+	left: calc(138.7vh * .335); 
+}
+.hsv-barcursor-l, .hsv-barcursor-r {
+	border: calc(138.7vh * .005) solid transparent; 
+}
+/* #guessButton{
+	top: calc(138.7vh * .07); 
+	left: calc(138.7vh * .14); 
+	width: calc(138.7vh * .32); 
+	height: calc(138.7vh * .086); 
+	font-size: calc(138.7vh * .05); 
+	line-height: calc(138.7vh * .086); 
+	padding: 0;
+} */
+#guessButton, #tutButton1, #tutButton2, #tutButton3, #tutButton4, #tutButton5{
+	vertical-align: middle;
+	top: calc(138.7vh * .475); 
+	left: calc(138.7vh * .595); 
+	width: calc(138.7vh * .32); 
+	height: calc(138.7vh * .086); 
+	font-size: calc(138.7vh * .05); 
+	line-height: calc(138.7vh * .086); 
+}
+#tutButton2, #tutButton5{
+	line-height: calc(138.7vh * .07); 
+	height: calc(138.7vh * .15); 
+}
+#luminanceBar{
+	border: calc(138.7vh * .002) solid rgb(85, 85, 85); 
+}
+.hsv-cursor {
+	width: calc(138.7vh * .01);
+	height: calc(138.7vh * .01);
+}
+/* #theWord{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: absolute;
+	top: calc(138.7vh * .124); 
+	left: calc(138.7vh * .59); 
+	width: calc(138.7vh * .33); 
+	height: calc(138.7vh * .16); 
+	font-size: calc(138.7vh * .035); 
+	padding-top: calc(138.7vh * .02); 
+} */
+#theWord{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: absolute;
+	top: calc(138.7vh * .21); 
+	left: calc(138.7vh * .59); 
+	width: calc(138.7vh * .33); 
+	height: calc(138.7vh * .16); 
+	font-size: calc(138.7vh * .035); 
+	padding-top: calc(138.7vh * .01); 
+}
+/* #guessNumber{
+	width: calc(138.7vh * .18);
+	top: calc(138.7vh * .04);
+	left: calc(138.7vh * .661);
+	font-size: calc(138.7vh * .05);
+} */
+#guessNumber{
+	width: calc(138.7vh * .18); 
+	top: calc(138.7vh * .13); 
+	left: calc(138.7vh * .661); 
+	font-size: calc(138.7vh * .05); 
+}
+#distance{
+	padding: calc(138.7vh * .01);
+	top: calc(138.7vh * .3);
+	right: calc(138.7vh * .04); 
+	font-size: calc(138.7vh * .025);
+}
+#highOrLow{
+	width: calc(138.7vh * .35);
+	height: calc(138.7vh * .22);
+	top: calc(138.7vh * .45);
+	left: calc(138.7vh * .58);
+	font-size: calc(138.7vh * .025);
+	line-height: calc(138.7vh * .03);
+}
+/* #testPatch {
+    width: calc(138.7vh * .1625); 
+	height: calc(138.7vh * .065);
+	line-height: calc(138.7vh * .065);
+	font-size: calc(138.7vh * .03);
+	top: calc(138.7vh * .19);
+	left: calc(138.7vh * .54);
+} */
+#testPatch {
+    width: calc(138.7vh * .1625); 
+	height: calc(138.7vh * .065); 
+	line-height: calc(138.7vh * .065); 
+	font-size: calc(138.7vh * .03); 
+	top: calc(138.7vh * .21);
+	left: calc(138.7vh * .624); 
+}
+#backGuess, #forwardGuess{
+	width: calc(138.7vh * .03);
+	height: calc(138.7vh * .03);;
+}
+#backGuess{
+	top: calc(138.7vh * .388);
+	left: calc(138.7vh * .77);;
+}
+#forwardGuess{
+	top: calc(138.7vh * .388);
+	left: calc(138.7vh * .8825);;
+}
+#historyPatch{
+	width: calc(138.7vh * .1625);
+	height: calc(138.7vh * .065);
+	line-height: calc(138.7vh * .065);
+	font-size: calc(138.7vh * .03);
+	top: calc(138.7vh * .37);
+	left: calc(138.7vh * .76);
+}
+#testPatch, #historyPatch{
+	border: calc(138.7vh * .002) solid rgb(181, 181, 181);
+}
+#sliders div{
+	border: calc(138.7vh * .002) solid rgb(181, 181, 181);
+}
+/* #sliders{
+	top: calc(138.7vh * .48);
+	left: calc(138.7vh * -.003);
+} */
+#sliders{
+	top: calc(138.7vh * .41);
+	left: calc(138.7vh * .004);
+}
+#sliders div div{
+	margin-top: calc(138.7vh * -.002);
+	margin-left: calc(138.7vh * -.002);
+	
+	border-right: calc(138.7vh * .01) solid rgb(85,85,85);
+}
+.sliders {
+	width: calc(138.7vh * .3);
+	height: calc(138.7vh * .01);
+    margin-top: calc(138.7vh * -.143);
+    margin-right: calc(138.7vh * .08);
+}
+.sliders div {
+	height: calc(138.7vh * .025);
+	margin-bottom: calc(138.7vh * .0045);
+	width: calc(138.7vh * .365);
+}
+.sliders div div {
+	height: calc(138.7vh * .025);
+	margin-top: calc(138.7vh * -.0005);
+	border-right: calc(138.7vh * .015) solid #555;
+}
+#slidersBack{
+	height: calc(138.7vh * .19);
+	width: calc(138.7vh * .1375);
+}
+#numBack{
+	width: calc(138.7vh * .1775);
+	height: calc(138.7vh * .09);
+}
+#rgbr:after, #rgbg:after, #rgbb:after,
+#hslh:after, #hsls:after, #hsll:after,
+#cmyc:after, #cmym:after, #cmyy:after{
+	font-size: calc(138.7vh * .02);
+}
+#rgbr:after {
+	margin-top: calc(138.7vh * -.06);
+	margin-left: calc(138.7vh * .375);
+}
+#rgbg:after {
+	margin-top: calc(138.7vh * -.06);
+	margin-left: calc(138.7vh * .375);
+}
+#rgbb:after {
+	margin-top: calc(138.7vh * -.06);
+	margin-left: calc(138.7vh * .375);
+}
+#hslh:after {
+	margin-top: calc(138.7vh * -.03);
+	margin-left: calc(138.7vh * .375);
+}
+#hsls:after {
+	margin-top: calc(138.7vh * -.03);
+	margin-left: calc(138.7vh * .375);
+}
+#hsll:after {
+	margin-top: calc(138.7vh * -.03);
+	margin-left: calc(138.7vh * .375);
+}
+#tR, #tG, #tB, #tH, #tS, #tL{
+	width: calc(138.7vh * .05);
+	height: calc(138.7vh * .025);
+	margin-left: calc(138.7vh * .36);
+	font-size: calc(138.7vh * .02);
+	margin-bottom: calc(138.7vh * .0008);
+}
+/* #inputs{
+	top: calc(138.7vh * .313);
+	left: calc(138.7vh * .041);
+} */
+#inputs{
+	top: calc(138.7vh * .243);
+	left: calc(138.7vh * .042);
+}
+#tR{
+	margin-top: calc(138.7vh * .021);
+}
+#tG, #tB, #tH, #tS, #tL{
+	margin-top: calc(138.7vh * .0035);
+}
+#loading{
+	top: calc(138.7vh * .285);
+	left: calc(138.7vh * .715);
+	width: calc(138.7vh * .07);
+}
+#hideCursorGlitchDiv{
+	width: calc(138.7vh * .05);
+	height: calc(138.7vh * .05);
+}
+.up{
+	width: calc(138.7vh * .02);
+	height: calc(138.7vh * .01);
+	margin-bottom: calc(138.7vh * .002);
+}
+.down{
+	width: calc(138.7vh * .02);
+	height: calc(138.7vh * .01);
+	margin-bottom: calc(138.7vh * .007);
+}
+
+@media only screen and (max-height: 455px){
+	#interactive{
+		margin-bottom: 5.5vw;
+	}
+}
+
+@media only screen and (min-aspect-ratio: 1000/721){
+}
+
+/*Btw the game's current minimum height cap is 400 pixels and minimum width cap is 600 pixels before it bugs out*/
+}

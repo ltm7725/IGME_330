@@ -1,0 +1,3 @@
+I coded in react, and bundled in Vite; both the Game and Documentation components of this project are located on the same webpage by swapping out HTML elements though navbar buttons
+
+When it comes to code changes, I refactored some of the major functions that needed tweaking and cleaned up the codebase by separating all code between modules of different categories. It's much more comprehensible althere could still be a bit more polish on the backend by adding more in-line notes and consolidating functions (duplicate/related code). I also did some major work with the UI, and implemented a new color-picker which functions MUCH better, giving me the space to add further functionality without nearly as many roadblocks in the future.
