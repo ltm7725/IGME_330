@@ -1,5 +1,5 @@
 // I. Variables & constants
-const accessToken = "pk.eyJ1IjoibHRtNzcyNSIsImEiOiJjbHVpb2tqN2cwNnZoMndxaXQycHR0Y2w5In0.VoT2-P6YfQR0utDId6MlXg";
+const accessToken = 'pk.eyJ1IjoibHRtNzcyNSIsImEiOiJjbHVpb2tqN2cwNnZoMndxaXQycHR0Y2w5In0.VoT2-P6YfQR0utDId6MlXg';
 let map;
 
 // An example of how our GeoJSON is formatted
@@ -44,7 +44,7 @@ const initMap = (center) => {
 };
 
 const addMarker = (feature, className, clickHandler) => {
-	// A. Create a map marker using feature *i.e. "Park" data
+	// A. Create a map marker using feature (i.e. "Park") data
 	// - the marker is a <div>
 	// - <div> className will be `poi` - see default-styles.css to see the details
 	// - note that we give the <div> the id of the "feature"
@@ -56,6 +56,7 @@ const addMarker = (feature, className, clickHandler) => {
 	const html = `
 	<b>${feature.properties.title}</b>
 	<p>${feature.properties.address}</p>
+	<p><b>Phone: </b>${feature.properties.phone}</p>
 	`;
 
 	// C. Make the marker, add a popup, and add to map
@@ -63,8 +64,8 @@ const addMarker = (feature, className, clickHandler) => {
 	// https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup
 	const marker = new mapboxgl.Marker(el)
 		.setLngLat(feature.geometry.coordinates)
-		.setPopup(new mapboxgl.Popup({ offset: 10 }))
-		.setHTML(html)
+		.setPopup(new mapboxgl.Popup({ offset: 10 })
+			.setHTML(html))
 		.addTo(map);
 
 	// D. Call this method when marker is clicked on
@@ -73,7 +74,14 @@ const addMarker = (feature, className, clickHandler) => {
 
 
 // III. "public" - will be exported
+const addMarkersToMap = (json, clickHandler) => {
+	geojson = json; // replace the default hard-coded JSON data
 
+	// loop through the features array and for each one add a marker to the map
+	for (const feature of geojson.features) {
+		addMarker(feature, "poi", clickHandler);
+	}
+}
 
 const flyTo = (center = [0, 0]) => {
 	//https://docs.mapbox.com/mapbox-gl-js/api/#map#flyto
@@ -92,4 +100,4 @@ const setPitchAndBearing = (pitch = 0, bearing = 0) => {
 	map.setBearing(bearing);
 };
 
-export { initMap, flyTo, setZoomLevel, setPitchAndBearing };
+export { initMap, flyTo, setZoomLevel, setPitchAndBearing, addMarkersToMap };
